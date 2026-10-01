@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Função quadrática</title>
+<meta name="description" content="Teoria interativa, jogo e exercícios infinitos com justificativa — 1º ano do Ensino Médio.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Kalam:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/*CSS*/
+</style>
+</head>
+<body>
+
+<header class="topo">
+  <div class="topo-in">
+    <div>
+      <h1>Função quadrática</h1>
+      <p class="sub">f(x) = ax² + bx + c e a parábola · 1º ano do Ensino Médio</p>
+    </div>
+    <a class="voltar" href="index.html">← Todos os assuntos</a>
+  </div>
+</header>
+
+<nav class="abas" aria-label="Partes da aula">
+  <div class="abas-in" role="tablist">
+    <button class="aba" role="tab" data-aba="teoria">📖 Teoria</button>
+    <button class="aba" role="tab" data-aba="jogo">🏀 Jogo</button>
+    <button class="aba" role="tab" data-aba="exercicios">✏️ Exercícios</button>
+    <button class="aba" role="tab" data-aba="saibamais">💡 Saiba mais</button>
+    <button class="aba" role="tab" data-aba="relatorio">📋 Meu relatório</button>
+  </div>
+</nav>
+
+<main>
+<!-- ================= TEORIA ================= -->
+<div class="painel" id="teoria">
+
+  <section>
+    <h2>O que é uma função quadrática</h2>
+    <p>É toda função que pode ser escrita como</p>
+    <p class="formula mat"><b>f(x) = ax² + bx + c</b>, &nbsp;com a ≠ 0</p>
+    <p>a, b e c são números reais chamados <b>coeficientes</b>. O "a" não pode ser zero: sem o x², a função vira uma reta (função do 1º grau). O gráfico de toda função quadrática é uma curva chamada <b>parábola</b>.</p>
+    <div class="exemplo">
+      <b>Achando a, b e c (cuidado com a ordem e com os sinais!)</b>
+      <ul class="passos">
+        <li>f(x) = 2x² − 3x + 1 → a = 2, b = −3, c = 1</li>
+        <li>f(x) = −x² + 4 → a = −1, b = 0, c = 4 <span class="nota">(não tem x: b = 0)</span></li>
+        <li>f(x) = 5x − x² → a = −1, b = 5, c = 0 <span class="nota">(o a é quem acompanha o x², esteja onde estiver)</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <h2>Brinque com a parábola</h2>
+    <p>Mexa em a, b e c e veja o que muda. Os pontos marcados são: <span class="mt rosa">raízes</span> (onde corta o eixo x), <span class="mt verde">vértice</span> (a "ponta" da parábola) e <span class="mt amarelo">onde corta o eixo y</span>.</p>
+    <div class="figura" id="fig-brinca"></div>
+    <div class="controles">
+      <div class="controle"><label for="sl-a">a</label><input type="range" id="sl-a" min="-3" max="3" step="0.5" value="1"><output id="out-a">1</output></div>
+      <div class="controle"><label for="sl-b">b</label><input type="range" id="sl-b" min="-6" max="6" step="1" value="-2"><output id="out-b">−2</output></div>
+      <div class="controle"><label for="sl-c">c</label><input type="range" id="sl-c" min="-8" max="8" step="1" value="-3"><output id="out-c">−3</output></div>
+    </div>
+    <div class="leitura" id="leitura-brinca"></div>
+    <p class="nota">Experimente: deixe a negativo; aumente e diminua o c; coloque a = 0 e veja o que acontece.</p>
+  </section>
+
+  <section>
+    <h2>1. A concavidade: o sinal de a</h2>
+    <div class="rolar"><table class="tab">
+      <tr><th>a &gt; 0</th><th>a &lt; 0</th></tr>
+      <tr><td>boca para <b>cima</b> 🙂<br>o vértice é o ponto <b>mais baixo</b> (valor <b>mínimo</b>)</td>
+          <td>boca para <b>baixo</b> 🙁<br>o vértice é o ponto <b>mais alto</b> (valor <b>máximo</b>)</td></tr>
+    </table></div>
+    <p>Quanto maior o valor de |a|, mais "fechada" fica a parábola.</p>
+  </section>
+
+  <section>
+    <h2>2. Onde corta o eixo y: o c</h2>
+    <p>No eixo y, x vale zero. Então f(0) = a·0² + b·0 + c = <b>c</b>. A parábola sempre corta o eixo y no ponto <span class="mt amarelo">(0, c)</span>.</p>
+  </section>
+
+  <section>
+    <h2>3. As raízes (zeros): fórmula de Bhaskara</h2>
+    <p>Raízes são os valores de x que fazem f(x) = 0, ou seja, onde a parábola <span class="mt rosa">corta o eixo x</span>. Primeiro calculamos o <b>discriminante</b> (delta):</p>
+    <p class="formula mat">Δ = b² − 4ac</p>
+    <p>E depois:</p>
+    <p class="formula mat">x = <span class="fr"><span>−b ± √Δ</span><span>2a</span></span></p>
+    <div class="rolar"><table class="tab">
+      <tr><th>Δ &gt; 0</th><th>Δ = 0</th><th>Δ &lt; 0</th></tr>
+      <tr><td>duas raízes reais <b>diferentes</b><br>(corta o eixo x em 2 pontos)</td><td>uma raiz real (<b>dupla</b>)<br>(só encosta no eixo x)</td><td><b>nenhuma</b> raiz real<br>(não toca o eixo x)</td></tr>
+    </table></div>
+    <div class="exemplo">
+      <b>Exemplo: raízes de f(x) = x² − 5x + 6</b>
+      <ol class="passos">
+        <li>a = 1, b = −5, c = 6</li>
+        <li>Δ = (−5)² − 4·1·6 = 25 − 24 = 1</li>
+        <li>x = <span class="mat"><span class="fr"><span>−(−5) ± √1</span><span>2·1</span></span> = <span class="fr"><span>5 ± 1</span><span>2</span></span></span></li>
+        <li>x₁ = <span class="mat"><span class="fr"><span>6</span><span>2</span></span> = 3</span> &nbsp;e&nbsp; x₂ = <span class="mat"><span class="fr"><span>4</span><span>2</span></span> = 2</span></li>
+      </ol>
+      <p class="nota">Erro clássico: (−5)² = +25. Quando b é negativo, use parênteses!</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>4. O vértice: o ponto de máximo ou de mínimo</h2>
+    <p>A parábola é simétrica: o vértice fica bem no meio das raízes. As coordenadas são:</p>
+    <p class="formula mat">x<sub>v</sub> = <span class="fr"><span>−b</span><span>2a</span></span> &nbsp;&nbsp;&nbsp; y<sub>v</sub> = <span class="fr"><span>−Δ</span><span>4a</span></span> &nbsp;(ou y<sub>v</sub> = f(x<sub>v</sub>))</p>
+    <div class="exemplo">
+      <b>Exemplo: vértice de f(x) = x² − 5x + 6</b>
+      <ol class="passos">
+        <li>x<sub>v</sub> = <span class="mat"><span class="fr"><span>−(−5)</span><span>2·1</span></span> = 2,5</span> (bem no meio de 2 e 3!)</li>
+        <li>y<sub>v</sub> = <span class="mat"><span class="fr"><span>−1</span><span>4·1</span></span> = −0,25</span></li>
+        <li>Como a &gt; 0, o vértice é um ponto de <b>mínimo</b>: o menor valor de f é −0,25.</li>
+      </ol>
+    </div>
+  </section>
+
+  <section>
+    <h2>5. Atalho: soma e produto</h2>
+    <p>Se x₁ e x₂ são as raízes:</p>
+    <p class="formula mat">x₁ + x₂ = <span class="fr"><span>−b</span><span>a</span></span> &nbsp;&nbsp;&nbsp; x₁ · x₂ = <span class="fr"><span>c</span><span>a</span></span></p>
+    <p>Quando a = 1, dá para achar as raízes "de cabeça": em x² − 5x + 6, procure dois números que <b>somam 5</b> e <b>multiplicam 6</b>: são 2 e 3.</p>
+  </section>
+
+  <section>
+    <h2>6. Onde isso aparece</h2>
+    <div class="exemplo">
+      <b>Bola chutada para cima: h(t) = −5t² + 20t</b> (h em metros, t em segundos)
+      <ol class="passos">
+        <li>a = −5 &lt; 0: a parábola tem ponto de <b>máximo</b> (a altura máxima).</li>
+        <li>Instante do topo: t<sub>v</sub> = <span class="mat"><span class="fr"><span>−20</span><span>2·(−5)</span></span> = 2 s</span></li>
+        <li>Altura máxima: h(2) = −5·4 + 20·2 = <b>20 m</b></li>
+        <li>Volta ao chão quando h = 0: −5t² + 20t = 0 ⟹ t(−5t + 20) = 0 ⟹ t = 0 ou <b>t = 4 s</b>.</li>
+      </ol>
+    </div>
+    <div class="exemplo">
+      <b>Cercado de área máxima:</b> com 40 m de tela, qual o maior retângulo possível?
+      <ol class="passos">
+        <li>Se um lado é x, o outro é 20 − x (meio perímetro menos x).</li>
+        <li>Área: A(x) = x(20 − x) = −x² + 20x.</li>
+        <li>x<sub>v</sub> = <span class="mat"><span class="fr"><span>−20</span><span>2·(−1)</span></span> = 10</span>: um quadrado de 10 m × 10 m, com área de <b>100 m²</b>.</li>
+      </ol>
+    </div>
+  </section>
+</div>
+
+<!-- ================= JOGO ================= -->
+<div class="painel" id="jogo" hidden>
+  <section>
+    <h2>🏀 Arremesso parabólico</h2>
+    <p>A bola sai da origem (0, 0) e segue a parábola <b>f(x) = ax² + bx</b>. Ajuste os coeficientes para a bola passar pela cesta! No nível 1 você só mexe no b; a partir do nível 2, no a e no b.</p>
+    <div class="placar"><span>Nível: <b id="j-nivel">1</b></span><span>Cestas: <b id="j-cestas">0</b></span><span>Pontos: <b id="j-pontos">0</b></span><span>Tentativas nesta cesta: <b id="j-tent">0</b></span></div>
+    <p class="pedido" id="j-funcao" aria-live="polite"></p>
+    <div class="figura" id="j-fig"></div>
+    <div class="controles">
+      <div class="controle" id="ctl-a"><label for="j-a">a</label><input type="range" id="j-a" min="-1.5" max="-0.05" step="0.05" value="-0.5"><output id="j-out-a"></output></div>
+      <div class="controle"><label for="j-b">b</label><input type="range" id="j-b" min="0" max="8" step="0.25" value="2"><output id="j-out-b"></output></div>
+    </div>
+    <div class="linha-btn"><button class="btn" id="j-lancar">Arremessar</button><button class="btn claro" id="j-pular">Outra cesta</button></div>
+    <div id="j-msg" aria-live="polite"></div>
+    <p class="nota">Dica: f(x) = ax² + bx vale 0 em x = 0 e em x = −b/a. A bola "cai" de volta no chão nesse segundo ponto!</p>
+  </section>
+</div>
+
+<!-- ================= EXERCÍCIOS ================= -->
+<div class="painel" id="exercicios" hidden>
+  <section>
+    <h2>✏️ Exercícios sem fim</h2>
+    <p>As questões são sorteadas na hora: dá para treinar quanto quiser. Escolha os assuntos abaixo. Depois de responder, aparece a justificativa e tudo vai para o seu relatório.</p>
+    <div id="quiz"></div>
+  </section>
+</div>
+
+<!-- ================= SAIBA MAIS ================= -->
+<div class="painel" id="saibamais" hidden>
+  <section>
+    <h2>💡 Estudo do sinal</h2>
+    <p>Às vezes a pergunta não é "quanto vale f(x)?", mas "para quais x a função é positiva?". Basta olhar a parábola em relação ao eixo x:</p>
+    <div class="figura" id="fig-sinal" style="max-width:520px"></div>
+    <p>Para f(x) = x² − 2x − 3 (raízes −1 e 3, boca para cima):</p>
+    <ul>
+      <li>f(x) &gt; 0 (acima do eixo) quando <b>x &lt; −1 ou x &gt; 3</b>;</li>
+      <li>f(x) = 0 quando <b>x = −1 ou x = 3</b>;</li>
+      <li>f(x) &lt; 0 (abaixo do eixo) quando <b>−1 &lt; x &lt; 3</b>.</li>
+    </ul>
+    <p class="nota">Regra de bolso (com a &gt; 0): "fora das raízes, o sinal de a; entre as raízes, o sinal contrário".</p>
+  </section>
+  <section>
+    <h2>💡 Forma fatorada e forma canônica</h2>
+    <p>A mesma função pode ser escrita de três jeitos. Cada um mostra algo de bandeja:</p>
+    <div class="rolar"><table class="tab">
+      <tr><th>Forma</th><th>Exemplo</th><th>O que mostra</th></tr>
+      <tr><td>geral</td><td class="mat">x² − 2x − 3</td><td>o c (corte no eixo y)</td></tr>
+      <tr><td>fatorada: a(x − x₁)(x − x₂)</td><td class="mat">(x + 1)(x − 3)</td><td>as raízes −1 e 3</td></tr>
+      <tr><td>canônica: a(x − x<sub>v</sub>)² + y<sub>v</sub></td><td class="mat">(x − 1)² − 4</td><td>o vértice (1, −4)</td></tr>
+    </table></div>
+  </section>
+</div>
+
+<!-- ================= RELATÓRIO ================= -->
+<div class="painel" id="relatorio" hidden><section id="rel"></section></div>
+</main>
+
+<footer class="rodape">Material de apoio para estudo · elaborado por Hiremar Soares. As respostas ficam guardadas só neste aparelho.</footer>
+
+<script>
+/*JS*/
+</script>
+<script>
+const par = (n) => (n < 0 ? `(${U.num(n)})` : U.num(n));        // número negativo entre parênteses
+const sgn = (n) => (n < 0 ? `− ${U.num(-n)}` : `+ ${U.num(n)}`);  // "+ 3" ou "− 3"
+
+/* ================= TEORIA: PARÁBOLA INTERATIVA ================= */
+function desenharBrinca() {
+  const a = +document.getElementById("sl-a").value, b = +document.getElementById("sl-b").value, c = +document.getElementById("sl-c").value;
+  document.getElementById("out-a").textContent = U.num(a, 1);
+  document.getElementById("out-b").textContent = U.num(b);
+  document.getElementById("out-c").textContent = U.num(c);
+  document.getElementById("fig-brinca").innerHTML = grafico({ a, b, c, pontos: true, rotulos: true, W: 460, H: 380, x0: -8, x1: 8, y0: -10, y1: 10 });
+  const L = document.getElementById("leitura-brinca");
+  if (a === 0) {
+    L.innerHTML = `<div style="grid-column:1/-1"><small>${U.poli(a, b, c)}</small><b>Com a = 0 não existe x²: isso é uma <u>reta</u>, não uma função quadrática!</b></div>`;
+    return;
+  }
+  const D = b * b - 4 * a * c, xv = -b / (2 * a), yv = -D / (4 * a);
+  let raizes;
+  if (D > 0) { const r1 = (-b - Math.sqrt(D)) / (2 * a), r2 = (-b + Math.sqrt(D)) / (2 * a); raizes = `x = ${U.num(Math.min(r1, r2))} e x = ${U.num(Math.max(r1, r2))}`; }
+  else if (D === 0) raizes = `x = ${U.num(xv)} (raiz dupla)`;
+  else raizes = "não tem raiz real";
+  L.innerHTML = `
+    <div style="grid-column:1/-1"><small>a função</small><b>${U.poli(a, b, c)}</b></div>
+    <div><small>concavidade</small><b>${a > 0 ? "para cima 🙂" : "para baixo 🙁"}</b></div>
+    <div><small>Δ = b² − 4ac</small><b>${par(b)}² − 4·${par(a)}·${par(c)} = ${U.num(D)}</b></div>
+    <div><small><span class="mt rosa">raízes</span></small><b>${raizes}</b></div>
+    <div><small><span class="mt verde">vértice</span></small><b>(${U.num(xv)}; ${U.num(yv)})</b></div>
+    <div><small><span class="mt amarelo">corta o eixo y</span></small><b>(0; ${U.num(c)})</b></div>
+    <div><small>${a > 0 ? "valor mínimo" : "valor máximo"}</small><b>${U.num(yv)}</b></div>`;
+}
+["sl-a", "sl-b", "sl-c"].forEach((id) => document.getElementById(id).addEventListener("input", desenharBrinca));
+
+document.getElementById("fig-sinal").innerHTML = grafico({
+  a: 1, b: -2, c: -3, pontos: true, W: 480, H: 300, x0: -4, x1: 6, y0: -5, y1: 6,
+  extra: (X, Y) => {
+    let s = "";
+    const faixa = (xa, xb, cor) => `<rect x="${X(xa)}" y="${Y(0) - 6}" width="${X(xb) - X(xa)}" height="12" fill="${cor}" opacity="0.55"/>`;
+    s += faixa(-4, -1, COR.verde) + faixa(3, 6, COR.verde) + faixa(-1, 3, COR.rosa);
+    s += `<text x="${X(-2.6)}" y="${Y(3)}" font-family="Kalam, cursive" font-size="17" font-weight="700" fill="${COR.certo || "#157347"}">f &gt; 0</text>`;
+    s += `<text x="${X(4)}" y="${Y(3)}" font-family="Kalam, cursive" font-size="17" font-weight="700" fill="#157347">f &gt; 0</text>`;
+    s += `<text x="${X(0.3)}" y="${Y(-2.2)}" font-family="Kalam, cursive" font-size="17" font-weight="700" fill="#b42335">f &lt; 0</text>`;
+    return s;
+  },
+});
+
+/* ================= JOGO: ARREMESSO ================= */
+const J = {
+  nivel: 1, cestas: 0, pontos: 0, tent: 0, alvo: null, aFixo: -0.5, voando: false, rastro: null,
+  JAN: { x0: -0.5, x1: 11, y0: -0.6, y1: 8.5 },
+  novaCesta() {
+    for (let k = 0; k < 500; k++) {
+      const a = this.nivel === 1 ? U.pick([-0.25, -0.5, -1]) : U.pick([-0.2, -0.3, -0.4, -0.6, -0.75, -1.2]);
+      const b = this.nivel === 1 ? U.rand(2, 16) / 2 : U.rand(4, 30) / 4;
+      const p = U.rand(3, 9) + (this.nivel >= 3 ? 0.5 : 0);
+      const q = a * p * p + b * p;
+      if (q >= 1.2 && q <= 7.5 && b <= 8) { this.alvo = { p, q }; this.aFixo = a; break; }
+    }
+    this.tent = 0; this.rastro = null;
+    document.getElementById("j-msg").innerHTML = "";
+    document.getElementById("ctl-a").style.display = this.nivel === 1 ? "none" : "";
+    document.getElementById("j-a").value = this.nivel === 1 ? this.aFixo : -0.5;
+    this.atualizar();
+  },
+  ab() { return { a: this.nivel === 1 ? this.aFixo : +document.getElementById("j-a").value, b: +document.getElementById("j-b").value }; },
+  atualizar(bolaX) {
+    const { a, b } = this.ab();
+    document.getElementById("j-out-a").textContent = U.num(a, 2);
+    document.getElementById("j-out-b").textContent = U.num(b, 2);
+    document.getElementById("j-funcao").innerHTML = U.poli(a, b, 0);
+    ["j-nivel", "j-cestas", "j-pontos", "j-tent"].forEach((id, i) => document.getElementById(id).textContent = [this.nivel, this.cestas, this.pontos, this.tent][i]);
+    const { p, q } = this.alvo, alvo = this.alvo;
+    const rastro = this.rastro;
+    document.getElementById("j-fig").innerHTML = grafico({
+      a: 0, b: 0, c: -100, numeros: true, W: 460, H: 380, ...this.JAN,
+      extra: (X, Y) => {
+        let s = "";
+        // cesta: aro laranja + rede
+        s += `<line x1="${X(p - 0.32)}" y1="${Y(q)}" x2="${X(p + 0.32)}" y2="${Y(q)}" stroke="#f08c00" stroke-width="5" stroke-linecap="round"/>`;
+        s += `<path d="M${X(p - 0.3)},${Y(q)} L${X(p - 0.18)},${Y(q - 0.5)} L${X(p + 0.18)},${Y(q - 0.5)} L${X(p + 0.3)},${Y(q)}" fill="none" stroke="${COR.tinta2}" stroke-width="1.4" stroke-dasharray="3 2"/>`;
+        s += `<text x="${X(p)}" y="${Y(q) - 10}" text-anchor="middle" font-family="Kalam, cursive" font-size="15" font-weight="700" fill="${COR.tinta}" stroke="#fff" stroke-width="4" paint-order="stroke">(${U.num(p)}; ${U.num(q, 2)})</text>`;
+        // prévia pontilhada só no comecinho da trajetória
+        let d = "";
+        for (let i = 0; i <= 20; i++) { const x = (1.2 * i) / 20; d += (i ? "L" : "M") + X(x).toFixed(1) + "," + Y(a * x * x + b * x).toFixed(1); }
+        s += `<path d="${d}" fill="none" stroke="${COR.tinta2}" stroke-width="2" stroke-dasharray="4 4"/>`;
+        if (rastro) s += `<path d="${rastro}" fill="none" stroke="#f08c00" stroke-width="2.5" opacity="0.8"/>`;
+        if (bolaX !== undefined) { const y = a * bolaX * bolaX + b * bolaX; s += `<circle cx="${X(bolaX)}" cy="${Y(y)}" r="9" fill="#f08c00" stroke="${COR.tinta}" stroke-width="1.5"/>`; }
+        else s += `<circle cx="${X(0)}" cy="${Y(0)}" r="9" fill="#f08c00" stroke="${COR.tinta}" stroke-width="1.5"/>`;
+        return s;
+      },
+    });
+  },
+  lancar() {
+    if (this.voando) return;
+    this.voando = true; this.tent++;
+    const { a, b } = this.ab();
+    const { x1, y0 } = this.JAN;
+    const W = 460, H = 380, X = (x) => ((x - this.JAN.x0) / (x1 - this.JAN.x0)) * W, Y = (y) => H - ((y - y0) / (this.JAN.y1 - y0)) * H;
+    const fim = Math.min(x1, Math.max(0.5, -b / a));
+    const dur = matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 1400;
+    const t0 = performance.now();
+    const passo = (agora) => {
+      const t = dur ? Math.min(1, (agora - t0) / dur) : 1, x = t * fim;
+      let d = "";
+      for (let i = 0; i <= 60; i++) { const xi = (x * i) / 60; d += (i ? "L" : "M") + X(xi).toFixed(1) + "," + Y(a * xi * xi + b * xi).toFixed(1); }
+      this.rastro = d;
+      this.atualizar(x);
+      if (t < 1) requestAnimationFrame(passo); else this.conferir(a, b);
+    };
+    requestAnimationFrame(passo);
+  },
+  conferir(a, b) {
+    this.voando = false;
+    const { p, q } = this.alvo, y = a * p * p + b * p, erro = y - q;
+    const m = document.getElementById("j-msg");
+    const xv = -b / (2 * a), yv = a * xv * xv + b * xv;
+    if (Math.abs(erro) <= 0.3) {
+      const ganho = Math.max(1, 4 - this.tent);
+      this.cestas++; this.pontos += ganho;
+      const subiu = this.cestas % 3 === 0 && this.nivel < 3;
+      m.innerHTML = `<div class="exemplo" style="border-color:#157347"><b>🏀 Cesta! +${ganho} ponto${ganho > 1 ? "s" : ""}</b>
+        Com ${U.poli(a, b, 0)}: f(${U.num(p)}) = ${U.num(a, 2)}·${U.num(p)}² + ${U.num(b, 2)}·${U.num(p)} ≈ ${U.num(y, 2)}, bem na altura da cesta (${U.num(q, 2)}).
+        <br>A bola subiu até a altura máxima y<sub>v</sub> ≈ ${U.num(yv, 2)}, em x<sub>v</sub> = −b/2a ≈ ${U.num(xv, 2)}.
+        ${subiu ? `<br><b>⭐ Você passou para o nível ${this.nivel + 1}!</b> ${this.nivel === 1 ? "Agora você também controla o a." : "Agora a cesta fica em posições quebradas."}` : ""}
+        <div class="linha-btn"><button class="btn" id="j-prox">Próxima cesta</button></div></div>`;
+      if (subiu) this.nivel++;
+      document.getElementById("j-prox").addEventListener("click", () => this.novaCesta());
+      this.atualizar();
+    } else {
+      let dica;
+      if (this.nivel === 1) dica = erro < 0 ? "A bola passou <b>abaixo</b> da cesta: aumente o b (a parábola fica mais alta e mais larga)." : "A bola passou <b>acima</b> da cesta: diminua o b.";
+      else dica = erro < 0 ? "Passou <b>abaixo</b>: aumente o b ou deixe o a mais perto de zero (a parábola abre mais)." : "Passou <b>acima</b>: diminua o b ou deixe o a mais negativo (a parábola fecha).";
+      m.innerHTML = `<p class="nota">Em x = ${U.num(p)}, a bola estava em y ≈ ${U.num(y, 2)}, e a cesta está em ${U.num(q, 2)}. ${dica}</p>`;
+      this.atualizar();
+    }
+  },
+};
+["j-a", "j-b"].forEach((id) => document.getElementById(id).addEventListener("input", () => { if (!J.voando) { J.rastro = null; J.atualizar(); } }));
+document.getElementById("j-lancar").addEventListener("click", () => J.lancar());
+document.getElementById("j-pular").addEventListener("click", () => J.novaCesta());
+
+/* ================= EXERCÍCIOS ================= */
+const naoZero = (a, b) => { let v; do v = U.rand(a, b); while (v === 0); return v; };
+const ponto = (x, y) => `(${U.num(x)}; ${U.num(y)})`;
+function resolBhaskara(a, b, c) {
+  const D = b * b - 4 * a * c;
+  let s = `<li>a = ${U.num(a)}, b = ${U.num(b)}, c = ${U.num(c)}</li>
+    <li>Δ = b² − 4ac = ${par(b)}² − 4·${par(a)}·${par(c)} = ${U.num(b * b)} ${sgn(-4 * a * c)} = <b>${U.num(D)}</b></li>`;
+  if (D < 0) return s + `<li>Δ &lt; 0: não existe raiz real (não há raiz quadrada real de número negativo).</li>`;
+  const rq = Math.sqrt(D);
+  s += `<li>x = <span class="mat">${U.frx(`−${par(b)} ± √${U.num(D)}`, `2·${par(a)}`)} = ${U.frx(`${U.num(-b)} ± ${U.num(rq)}`, U.num(2 * a))}</span></li>`;
+  if (D === 0) return s + `<li>Δ = 0: raiz dupla x = <b>${U.fr(-b, 2 * a)}</b></li>`;
+  return s + `<li>x₁ = ${U.frx(U.num(-b + rq), U.num(2 * a))} = <b>${U.fr(-b + rq, 2 * a)}</b> &nbsp;e&nbsp; x₂ = ${U.frx(U.num(-b - rq), U.num(2 * a))} = <b>${U.fr(-b - rq, 2 * a)}</b></li>`;
+}
+function raizesInteiras(aOpcoes = [1, 1, 1, -1, 2]) {
+  const a = U.pick(aOpcoes);
+  let r1, r2;
+  do { r1 = U.rand(-6, 6); r2 = U.rand(-6, 6); } while (r1 === 0 && r2 === 0);
+  if (r1 > r2) [r1, r2] = [r2, r1];
+  return { a, r1, r2, b: -a * (r1 + r2), c: a * r1 * r2 };
+}
+const conjunto = (r1, r2) => r1 === r2 ? `x = ${U.num(r1)} (raiz dupla)` : `x = ${U.num(Math.min(r1, r2))} e x = ${U.num(Math.max(r1, r2))}`;
+// escreve a função com os termos fora da ordem de vez em quando
+function poliBaguncado(a, b, c) {
+  const termos = [{ k: a, x: "x²" }, { k: b, x: "x" }, { k: c, x: "" }].filter((t) => t.k !== 0);
+  const ord = Math.random() < 0.45 ? U.shuffle(termos) : termos;
+  let s = "";
+  ord.forEach((t, i) => {
+    const v = Math.abs(t.k), coef = v === 1 && t.x ? "" : U.num(v);
+    s += i === 0 ? (t.k < 0 ? "−" : "") + coef + t.x : (t.k < 0 ? " − " : " + ") + coef + t.x;
+  });
+  return "f(x) = " + s;
+}
+
+const GERADORES = {
+  coef: {
+    nome: "Coeficientes a, b e c",
+    gerar() {
+      const a = naoZero(-4, 4), b = Math.random() < 0.2 ? 0 : naoZero(-7, 7);
+      let c = Math.random() < 0.2 ? 0 : naoZero(-9, 9); if (b === 0 && c === 0) c = naoZero(-9, 9);
+      const txt = (A, B, C) => `a = ${U.num(A)}, b = ${U.num(B)}, c = ${U.num(C)}`;
+      return {
+        enun: `Quais são os coeficientes de <b>${poliBaguncado(a, b, c)}</b>?`,
+        certa: txt(a, b, c),
+        erradas: [
+          { html: txt(Math.abs(a), Math.abs(b), Math.abs(c)), porque: "os sinais fazem parte dos coeficientes: o sinal que vem antes do termo vai junto." },
+          { html: txt(a, c, b), porque: "b é o número que acompanha o x; c é o termo sem x." },
+          { html: txt(c, b, a), porque: "a é sempre quem acompanha o x², não importa a posição em que ele aparece." },
+          { html: txt(a, -b, c), porque: `confira o sinal do termo com x: b = ${U.num(b)}.` },
+          { html: txt(b, a, c), porque: "a é quem acompanha o x² e b quem acompanha o x." },
+          { html: txt(-a, b, c), porque: `confira o sinal do termo com x²: a = ${U.num(a)}.` },
+          { html: txt(a, b, -c), porque: `confira o sinal do termo sem x: c = ${U.num(c)}.` },
+          { html: txt(a, b, c + 1), porque: `o termo sem x é c = ${U.num(c)}.` },
+        ],
+        resol: `<p>Reorganize na ordem ax² + bx + c: <b>${U.poli(a, b, c)}</b>.</p><p>Quem acompanha x² é o <b>a = ${U.num(a)}</b>; quem acompanha x é o <b>b = ${U.num(b)}</b>${b === 0 ? " (não aparece termo com x)" : ""}; o termo sem x é o <b>c = ${U.num(c)}</b>${c === 0 ? " (não aparece)" : ""}.</p>`,
+      };
+    },
+  },
+
+  delta: {
+    nome: "Discriminante (Δ)",
+    gerar() {
+      let a, b, c;
+      const tipo = U.pick([1, 0, -1]);
+      if (tipo >= 0) { const r = raizesInteiras([1, -1, 2, -2]); if (tipo === 0) { r.r2 = r.r1; r.b = -2 * r.a * r.r1; r.c = r.a * r.r1 * r.r1; } ({ a, b, c } = r); }
+      else { a = U.pick([1, 2, -1, 3]); b = U.rand(-4, 4); c = a > 0 ? U.rand(Math.ceil((b * b) / (4 * a)) + 1, 9) : -U.rand(Math.ceil((b * b) / 4) + 1, 9); }
+      const D = b * b - 4 * a * c;
+      if (Math.random() < 0.5) {
+        return {
+          enun: `Calcule o discriminante <b>Δ</b> de <b>${U.poli(a, b, c)}</b>.`,
+          certa: `Δ = ${U.num(D)}`,
+          erradas: [
+            { html: `Δ = ${U.num(-b * b - 4 * a * c)}`, porque: `b² é sempre positivo: ${par(b)}² = ${U.num(b * b)}, e não ${U.num(-b * b)}.` },
+            { html: `Δ = ${U.num(b * b + 4 * a * c)}`, porque: "o sinal do 4ac ficou trocado. Cuidado com o jogo de sinais em −4·a·c." },
+            { html: `Δ = ${U.num(b - 4 * a * c)}`, porque: "faltou elevar o b ao quadrado." },
+            { html: `Δ = ${U.num(b * b - 2 * a * c)}`, porque: "é 4ac, e não 2ac." },
+            { html: `Δ = ${U.num(D + 2)}`, porque: "confira a conta: Δ = b² − 4ac." },
+            { html: `Δ = ${U.num(D - 4)}`, porque: "confira a conta: Δ = b² − 4ac." },
+            { html: `Δ = ${U.num(b * b + 4)}`, porque: "confira a conta de 4·a·c." },
+          ],
+          resol: `<ol class="passos">${resolBhaskara(a, b, c).split("</li>").slice(0, 2).join("</li>")}</li></ol>`,
+        };
+      }
+      const nomes = { 1: "Duas raízes reais diferentes", 0: "Uma raiz real (raiz dupla)", "-1": "Nenhuma raiz real" };
+      const k = Math.sign(D);
+      return {
+        enun: `Quantas raízes reais tem <b>${U.poli(a, b, c)}</b>?`,
+        certa: nomes[k],
+        erradas: [
+          { html: nomes[1], porque: "duas raízes diferentes só acontecem quando Δ > 0." },
+          { html: nomes[0], porque: "raiz dupla só acontece quando Δ = 0." },
+          { html: nomes[-1], porque: "nenhuma raiz real só acontece quando Δ < 0." },
+          { html: "Três raízes reais", porque: "uma função do 2º grau tem no máximo duas raízes." },
+        ],
+        resol: `<ol class="passos">${resolBhaskara(a, b, c).split("</li>").slice(0, 2).join("</li>")}</li>
+          <li>Como Δ ${D > 0 ? "&gt; 0" : D === 0 ? "= 0" : "&lt; 0"}: <b>${nomes[k].toLowerCase()}</b>.</li></ol>`,
+      };
+    },
+  },
+
+  raizes: {
+    nome: "Raízes (Bhaskara)",
+    gerar() {
+      const { a, r1, r2, b, c } = raizesInteiras();
+      return {
+        enun: `Quais são as raízes de <b>${U.poli(a, b, c)}</b>?`,
+        fig: "",
+        certa: conjunto(r1, r2),
+        erradas: [
+          { html: conjunto(-r1, -r2), porque: "os sinais ficaram trocados. Lembre: x = (−b ± √Δ) ÷ 2a — o −b muda o sinal de b." },
+          { html: conjunto(r1, -r2), porque: "uma das raízes ficou com o sinal trocado. Teste: substitua na função e veja se dá zero." },
+          { html: conjunto(2 * r1, 2 * r2), porque: "faltou dividir por 2a." },
+          { html: conjunto(r1 + 1, r2 + 1), porque: "confira o Δ e a raiz quadrada." },
+          { html: conjunto(r1 - 2, r2 + 2), porque: "teste substituindo na função: esses valores não dão zero." },
+          { html: "Não tem raiz real", porque: `aqui Δ = ${U.num(b * b - 4 * a * c)} ≥ 0, então existem raízes reais.` },
+        ],
+        resol: `<ol class="passos">${resolBhaskara(a, b, c)}</ol>${a === 1 && r1 !== r2 ? `<p class="nota">Atalho por soma e produto: dois números que somam ${U.num(-b)} e multiplicam ${U.num(c)}: ${U.num(r1)} e ${U.num(r2)}.</p>` : ""}`,
+      };
+    },
+  },
+
+  vertice: {
+    nome: "Vértice",
+    gerar() {
+      const a = U.pick([1, -1, 2, -2]), xv = naoZero(-4, 4), yv = U.rand(-6, 6);
+      const b = -2 * a * xv, c = a * xv * xv + yv, D = b * b - 4 * a * c;
+      return {
+        enun: `Qual é o vértice da parábola de <b>${U.poli(a, b, c)}</b>?`,
+        certa: `V = ${ponto(xv, yv)}`,
+        erradas: [
+          { html: `V = ${ponto(-xv, yv)}`, porque: "o x do vértice é −b ÷ 2a: o sinal de menos na frente do b é obrigatório." },
+          { html: `V = ${ponto(xv, -yv)}`, porque: "o y do vértice é −Δ ÷ 4a (ou f(xᵥ)). Faltou o sinal de menos." },
+          { html: `V = ${ponto(yv, xv)}`, porque: "as coordenadas ficaram invertidas: primeiro vem o x, depois o y." },
+          { html: `V = ${ponto(-b / a, yv)}`, porque: "o x do vértice é −b ÷ 2a, não −b ÷ a." },
+          { html: `V = ${ponto(xv, c)}`, porque: "c é onde a parábola corta o eixo y, não o y do vértice." },
+        ],
+        resol: `<ol class="passos"><li>x<sub>v</sub> = ${U.frx("−b", "2a")} = ${U.frx(`−${par(b)}`, `2·${par(a)}`)} = <b>${U.num(xv)}</b></li>
+          <li>y<sub>v</sub> = f(${U.num(xv)}) = ${U.num(a)}·${par(xv)}² ${sgn(b)}·${par(xv)} ${sgn(c)} = <b>${U.num(yv)}</b></li>
+          <li>Conferindo pela fórmula: Δ = ${U.num(D)}, então y<sub>v</sub> = ${U.frx("−Δ", "4a")} = ${U.frx(U.num(-D), U.num(4 * a))} = ${U.num(yv)} ✔</li></ol>`,
+      };
+    },
+  },
+
+  maxmin: {
+    nome: "Máximo ou mínimo",
+    gerar() {
+      const a = U.pick([1, -1, 2, -2, 3, -3]), xv = U.rand(-4, 4);
+      let yv = naoZero(-8, 8); if (yv === xv) yv++;
+      const b = -2 * a * xv, c = a * xv * xv + yv;
+      const tipo = a > 0 ? "mínimo" : "máximo", outro = a > 0 ? "máximo" : "mínimo";
+      return {
+        enun: `A função <b>${U.poli(a, b, c)}</b> tem valor máximo ou mínimo? Qual é esse valor?`,
+        certa: `Valor ${tipo}, igual a ${U.num(yv)}`,
+        erradas: [
+          { html: `Valor ${outro}, igual a ${U.num(yv)}`, porque: `a = ${U.num(a)} é ${a > 0 ? "positivo: boca para cima, então o vértice é o ponto mais baixo (mínimo)" : "negativo: boca para baixo, então o vértice é o ponto mais alto (máximo)"}.` },
+          { html: `Valor ${tipo}, igual a ${U.num(xv)}`, porque: `${U.num(xv)} é o x do vértice (onde o ${tipo} acontece). O valor ${tipo} é o y do vértice.` },
+          { html: `Valor ${tipo}, igual a ${U.num(c)}`, porque: "c é onde a parábola corta o eixo y, não o valor extremo." },
+          { html: `Valor ${outro}, igual a ${U.num(xv)}`, porque: "tipo errado e valor errado: veja o sinal de a e calcule o y do vértice." },
+        ],
+        resol: `<ol class="passos"><li>a = ${U.num(a)} ${a > 0 ? "&gt; 0 → boca para cima 🙂 → o vértice é ponto de <b>mínimo</b>" : "&lt; 0 → boca para baixo 🙁 → o vértice é ponto de <b>máximo</b>"}.</li>
+          <li>x<sub>v</sub> = ${U.frx(`−${par(b)}`, `2·${par(a)}`)} = ${U.num(xv)}</li>
+          <li>y<sub>v</sub> = f(${U.num(xv)}) = <b>${U.num(yv)}</b>: esse é o valor ${tipo}.</li></ol>`,
+      };
+    },
+  },
+
+  grafico: {
+    nome: "Lendo o gráfico",
+    gerar() {
+      let r;
+      do r = raizesInteiras([1, -1]); while (r.c === 0 || r.r1 === r.r2 || Math.abs(r.c) > 9 || Math.abs(-r.b / (2 * r.a)) > 6);
+      const { a, b, c } = r;
+      const yv = c - (b * b) / (4 * a);
+      const lim = Math.max(10, Math.ceil(Math.abs(yv)) + 1);
+      const txt = (sa, sc) => `a ${sa > 0 ? "&gt;" : "&lt;"} 0 e c ${sc > 0 ? "&gt;" : "&lt;"} 0`;
+      const sa = Math.sign(a), sc = Math.sign(c);
+      return {
+        enun: "Observe o gráfico de f(x) = ax² + bx + c. O que podemos afirmar sobre os sinais de a e c?",
+        fig: grafico({ a, b, c, W: 400, H: 300, x0: -8, x1: 8, y0: -lim, y1: lim, numeros: false }),
+        certa: txt(sa, sc),
+        erradas: [
+          { html: txt(-sa, sc), porque: `a parábola tem a boca virada para ${a > 0 ? "cima, então a > 0" : "baixo, então a < 0"}.` },
+          { html: txt(sa, -sc), porque: `a parábola corta o eixo y ${c > 0 ? "acima" : "abaixo"} da origem, então c ${c > 0 ? "> 0" : "< 0"}.` },
+          { html: txt(-sa, -sc), porque: "os dois sinais estão trocados: olhe a boca da parábola (a) e onde ela corta o eixo y (c)." },
+        ],
+        resol: `<ol class="passos"><li>Boca para ${a > 0 ? "cima" : "baixo"} → <b>a ${a > 0 ? "&gt;" : "&lt;"} 0</b>.</li>
+          <li>Corta o eixo y no ponto (0, c), que está ${c > 0 ? "acima" : "abaixo"} da origem → <b>c ${c > 0 ? "&gt;" : "&lt;"} 0</b>.</li>
+          <li>Bônus: corta o eixo x em dois pontos, então Δ &gt; 0.</li></ol>`,
+      };
+    },
+  },
+
+  somaprod: {
+    nome: "Soma e produto",
+    gerar() {
+      let a, b, c;
+      do { a = U.pick([1, 1, 2, -1, 3]); b = naoZero(-9, 9); c = naoZero(-9, 9); } while (Math.abs(b) === Math.abs(c));
+      const S = U.fr(-b, a), P = U.fr(c, a);
+      const t = (s, p) => `soma = ${s} e produto = ${p}`;
+      return {
+        enun: `Sem calcular as raízes, qual é a soma e o produto das raízes de <b>${U.poli(a, b, c)}</b>?`,
+        certa: t(S, P),
+        erradas: [
+          { html: t(U.fr(b, a), P), porque: "a soma é −b ÷ a: o sinal de menos fica na frente do b." },
+          { html: t(S, U.fr(-c, a)), porque: "o produto é c ÷ a, sem sinal de menos." },
+          { html: t(P, S), porque: "inverteu: soma = −b ÷ a e produto = c ÷ a." },
+          { html: t(U.fr(-b, 1), U.fr(c, 1)), porque: `faltou dividir por a = ${U.num(a)}.` },
+        ],
+        resol: `<ol class="passos"><li>a = ${U.num(a)}, b = ${U.num(b)}, c = ${U.num(c)}</li>
+          <li>Soma = ${U.frx("−b", "a")} = ${U.frx(`−${par(b)}`, U.num(a))} = <b>${S}</b></li>
+          <li>Produto = ${U.frx("c", "a")} = ${U.frx(U.num(c), U.num(a))} = <b>${P}</b></li></ol>
+          <p class="nota">Funciona até quando as raízes não são reais (Δ &lt; 0), mas no 1º ano usamos quando Δ ≥ 0.</p>`,
+      };
+    },
+  },
+
+  valor: {
+    nome: "Calcular f(x)",
+    gerar() {
+      const a = naoZero(-3, 3), b = U.rand(-6, 6), c = U.rand(-8, 8), k = naoZero(-3, 3);
+      const v = a * k * k + b * k + c;
+      return {
+        enun: `Se <b>${U.poli(a, b, c)}</b>, quanto vale <b>f(${U.num(k)})</b>?`,
+        certa: `${U.num(v)}`,
+        erradas: [
+          { html: U.num(-a * k * k + b * k + c), porque: `${par(k)}² = ${U.num(k * k)} é positivo. Calcule a potência antes de multiplicar pelo a.` },
+          { html: U.num(a * 2 * k + b * k + c), porque: `x² não é 2x: ${par(k)}² = ${par(k)}·${par(k)} = ${U.num(k * k)}.` },
+          { html: U.num(a * k * k - b * k + c), porque: "o sinal do termo bx ficou trocado. Use parênteses ao substituir números negativos." },
+          { html: U.num(a * k * k + b * k - c), porque: "o sinal do c ficou trocado." },
+          { html: U.num(v + 1), porque: "confira as contas, termo a termo." },
+          { html: U.num(v - 2), porque: "confira as contas, termo a termo." },
+          { html: U.num(v + 3), porque: "confira as contas, termo a termo." },
+          { html: U.num(a * k + b * k + c), porque: `faltou elevar ao quadrado: ${par(k)}² = ${U.num(k * k)}.` },
+        ],
+        resol: `<p>Troque cada x por ${par(k)}:</p><p class="mat">f(${U.num(k)}) = ${U.num(a)}·${par(k)}² ${sgn(b)}·${par(k)} ${sgn(c)} = ${U.num(a * k * k)} ${sgn(b * k)} ${sgn(c)} = <b>${U.num(v)}</b></p>`,
+      };
+    },
+  },
+
+  aplicacoes: {
+    nome: "Problemas do dia a dia",
+    gerar() {
+      const tipo = U.pick(["bola", "bola", "cerca", "lucro"]);
+      if (tipo === "bola") {
+        const v = U.pick([10, 20, 30, 40]), tv = v / 10, hmax = (v * v) / 20, tchao = v / 5;
+        const pergunta = U.pick(["altura", "tempo", "chao"]);
+        const enunBase = `Uma bola é lançada para cima e sua altura (em metros) após t segundos é <b>h(t) = −5t² + ${v}t</b>.`;
+        const resolBase = `<ol class="passos"><li>a = −5 &lt; 0: a parábola tem ponto de máximo (o topo da subida).</li>
+          <li>Instante do topo: t<sub>v</sub> = ${U.frx(`−${v}`, "2·(−5)")} = ${U.num(tv)} s</li>
+          <li>Altura máxima: h(${U.num(tv)}) = −5·${U.num(tv * tv)} + ${v}·${U.num(tv)} = ${U.num(hmax)} m</li>
+          <li>Volta ao chão: −5t² + ${v}t = 0 ⟹ t(−5t + ${v}) = 0 ⟹ t = 0 ou t = ${U.num(tchao)} s</li></ol>`;
+        if (pergunta === "altura") return {
+          enun: enunBase + " Qual é a altura máxima atingida?", certa: `${U.num(hmax)} m`,
+          erradas: [
+            { html: `${U.num(tv)} m`, porque: `${U.num(tv)} é o instante (em segundos) em que a bola chega ao topo, não a altura.` },
+            { html: `${U.num(2 * hmax)} m`, porque: "confira: y_v = −Δ ÷ 4a. Parece que você dividiu por 2a." },
+            { html: `${U.num(v)} m`, porque: `${v} é a velocidade inicial (o coeficiente b), não a altura.` },
+            { html: `${U.num(hmax / 2)} m`, porque: "confira a conta de h(t) no instante do topo." },
+          ], resol: resolBase,
+        };
+        if (pergunta === "tempo") return {
+          enun: enunBase + " Em que instante a bola atinge a altura máxima?", certa: `${U.num(tv)} s`,
+          erradas: [
+            { html: `${U.num(tchao)} s`, porque: "esse é o instante em que a bola volta ao chão. O topo fica no meio do caminho." },
+            { html: `${U.num(hmax)} s`, porque: "esse valor é a altura máxima (em metros), não o tempo." },
+            { html: `${U.num(v / 5 + 1)} s`, porque: "use t_v = −b ÷ 2a." },
+            { html: `${U.num(v)} s`, porque: "use t_v = −b ÷ 2a." },
+          ], resol: resolBase,
+        };
+        return {
+          enun: enunBase + " Depois de quanto tempo a bola volta ao chão?", certa: `${U.num(tchao)} s`,
+          erradas: [
+            { html: `${U.num(tv)} s`, porque: "nesse instante a bola está no topo, não no chão." },
+            { html: `${U.num(hmax)} s`, porque: "esse valor é a altura máxima, em metros." },
+            { html: `${U.num(tchao * 2)} s`, porque: "resolva h(t) = 0: t(−5t + " + v + ") = 0." },
+            { html: `${U.num(v)} s`, porque: "resolva h(t) = 0: t(−5t + " + v + ") = 0." },
+          ], resol: resolBase,
+        };
+      }
+      if (tipo === "cerca") {
+        const P = U.pick([20, 24, 40, 48, 60, 80, 100]), L = P / 4, A = L * L;
+        return {
+          enun: `Com <b>${P} m</b> de tela, um fazendeiro quer cercar um terreno retangular com a <b>maior área possível</b>. Qual é essa área?`,
+          certa: `${U.num(A)} m²`,
+          erradas: [
+            { html: `${U.num(L)} m²`, porque: `${U.num(L)} m é a medida do lado, não a área.` },
+            { html: `${U.num((P / 2) * (P / 2))} m²`, porque: "os lados somam metade do perímetro; um lado sozinho não pode ter metade da tela." },
+            { html: `${U.num(P * P / 8)} m²`, porque: "confira: A(x) = x(" + P / 2 + " − x) e o máximo fica em x = " + L + "." },
+            { html: `${U.num(A / 2)} m²`, porque: "confira a conta da área no vértice." },
+          ],
+          resol: `<ol class="passos"><li>Se um lado mede x, o outro mede ${P / 2} − x (metade do perímetro menos x).</li>
+            <li>A(x) = x(${P / 2} − x) = −x² + ${P / 2}x, uma parábola com a &lt; 0 (tem máximo).</li>
+            <li>x<sub>v</sub> = ${U.frx(`−${P / 2}`, "2·(−1)")} = ${U.num(L)} m. O outro lado também mede ${U.num(L)} m: é um quadrado!</li>
+            <li>Área máxima: ${U.num(L)} · ${U.num(L)} = <b>${U.num(A)} m²</b></li></ol>`,
+        };
+      }
+      const k = 2 * U.rand(10, 30), c0 = U.pick([50, 80, 100, 120]), xv = k / 2, Lmax = xv * xv - c0;
+      const qual = Math.random() < 0.5;
+      return {
+        enun: `O lucro de uma lanchonete, em reais, ao vender x lanches por dia é <b>L(x) = −x² + ${k}x − ${c0}</b>. ${qual ? "Quantos lanches ela deve vender para ter o lucro máximo?" : "Qual é o lucro máximo?"}`,
+        certa: qual ? `${xv} lanches` : `R$ ${U.num(Lmax)}`,
+        erradas: qual ? [
+          { html: `${k} lanches`, porque: `com ${k} lanches o lucro volta a ser −${c0} (igual a vender nenhum). O máximo fica no meio: x_v = −b ÷ 2a.` },
+          { html: `${xv * xv} lanches`, porque: "isso é x_v ao quadrado. A quantidade é o próprio x_v." },
+          { html: `${c0} lanches`, porque: `${c0} é o custo fixo (o c), não a quantidade.` },
+          { html: `${xv + 5} lanches`, porque: "use x_v = −b ÷ 2a." },
+        ] : [
+          { html: `R$ ${U.num(xv * xv)}`, porque: `esqueceu de descontar o custo fixo de R$ ${c0}.` },
+          { html: `R$ ${U.num(xv)}`, porque: `${xv} é a quantidade de lanches (x_v), não o lucro (y_v).` },
+          { html: `R$ ${U.num(k * k - c0)}`, porque: "o valor de x² é x_v², não k²." },
+          { html: `R$ ${U.num(Lmax + c0 * 2)}`, porque: "o custo fixo se subtrai: L(x_v) = −x_v² + " + k + "x_v − " + c0 + "." },
+        ],
+        resol: `<ol class="passos"><li>a = −1 &lt; 0: a parábola tem ponto de máximo.</li>
+          <li>x<sub>v</sub> = ${U.frx(`−${k}`, "2·(−1)")} = ${xv} lanches</li>
+          <li>L(${xv}) = −${xv}² + ${k}·${xv} − ${c0} = −${xv * xv} + ${k * xv} − ${c0} = <b>R$ ${U.num(Lmax)}</b></li></ol>`,
+      };
+    },
+  },
+};
+
+/* ================= LIGAR TUDO ================= */
+iniciarAbas();
+desenharBrinca();
+J.novaCesta();
+criarQuiz({ raiz: document.getElementById("quiz"), modulo: "Função quadrática", geradores: GERADORES });
+iniciarRelatorio(document.getElementById("rel"));
+</script>
+</body>
+</html>

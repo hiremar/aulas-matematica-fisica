@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aulas de Matemática e Física</title>
+<meta name="description" content="Materiais interativos de estudo: teoria, jogos e exercícios infinitos com justificativa.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Kalam:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* =========================================================
+   Visual "caderno quadriculado" — comum a todas as páginas
+   ========================================================= */
+:root {
+  color-scheme: light;
+  --papel: #fbfdff;          /* fundo da página */
+  --quadro: #f4f8fc;         /* fundo das figuras */
+  --grade: #d6e4f2;          /* linhas do quadriculado */
+  --tinta: #1d3557;          /* "caneta azul": texto principal */
+  --tinta-2: #4a6283;        /* texto secundário */
+  --margem: #e05561;         /* linha vermelha da margem do caderno */
+  /* marca-textos: cada cor tem UM significado fixo */
+  --mt-rosa: #ff8cc6;        /* cateto oposto / raízes */
+  --mt-verde: #6fdc8c;       /* cateto adjacente / vértice */
+  --mt-amarelo: #ffe14d;     /* hipotenusa / onde corta o eixo y */
+  --mt-azul: #8cc8ff;
+  --certo: #157347;
+  --certo-bg: #e3f6ea;
+  --errado: #b42335;
+  --errado-bg: #fde8eb;
+  --raio: 10px;
+  --fonte: "Atkinson Hyperlegible", "Segoe UI", Roboto, Arial, sans-serif;
+  --mao: "Kalam", "Comic Sans MS", "Segoe Print", cursive;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--papel);
+  color: var(--tinta);
+  font-family: var(--fonte);
+  font-size: 17px;
+  line-height: 1.6;
+}
+a { color: var(--tinta); }
+button, input, select { font: inherit; color: inherit; }
+:focus-visible { outline: 3px solid var(--mt-azul); outline-offset: 2px; }
+
+/* ---------- topo ---------- */
+.topo {
+  border-bottom: 2px solid var(--margem);
+  background: #fff;
+}
+.topo-in {
+  max-width: 880px; margin: 0 auto; padding: 18px 16px 12px;
+  display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+}
+.topo h1 { margin: 0; font-size: 1.75rem; line-height: 1.15; letter-spacing: -0.01em; }
+.topo .sub { margin: 2px 0 0; color: var(--tinta-2); font-size: 0.95rem; }
+.voltar { font-size: 0.9rem; color: var(--tinta-2); text-decoration: none; white-space: nowrap; }
+.voltar:hover { text-decoration: underline; }
+
+/* ---------- abas (parecem as abas de um fichário) ---------- */
+.abas {
+  position: sticky; top: 0; z-index: 20;
+  background: rgba(251, 253, 255, 0.96);
+  backdrop-filter: blur(4px);
+  border-bottom: 1px solid var(--grade);
+}
+.abas-in {
+  max-width: 880px; margin: 0 auto; padding: 8px 16px 0;
+  display: flex; gap: 4px; overflow-x: auto; scrollbar-width: none;
+}
+.abas-in::-webkit-scrollbar { display: none; }
+.aba {
+  flex: 0 0 auto;
+  border: 1px solid var(--grade); border-bottom: none;
+  background: #eef4fa; color: var(--tinta-2);
+  padding: 8px 14px; border-radius: 9px 9px 0 0;
+  cursor: pointer; font-weight: 700; font-size: 0.95rem;
+}
+.aba[aria-selected="true"] { background: #fff; color: var(--tinta); box-shadow: inset 0 3px 0 var(--tinta); }
+
+/* ---------- conteúdo ---------- */
+main { max-width: 880px; margin: 0 auto; padding: 8px 16px 64px; }
+.painel[hidden] { display: none; }
+.painel > section { margin: 28px 0 40px; }
+h2 { font-size: 1.45rem; line-height: 1.25; margin: 0 0 10px; }
+h3 { font-size: 1.12rem; margin: 22px 0 6px; }
+p, li { max-width: 68ch; }
+.nota {                          /* anotação "do professor", escrita à mão */
+  font-family: var(--mao); font-size: 1.15rem; color: #2b59a8; line-height: 1.35;
+}
+.destaque {                      /* caixa de regra importante */
+  border-left: 5px solid var(--tinta); background: #fff;
+  padding: 12px 16px; margin: 14px 0; border-radius: 0 var(--raio) var(--raio) 0;
+  box-shadow: 0 1px 0 var(--grade);
+}
+.exemplo {                       /* exemplo resolvido */
+  background: #fff; border: 1px solid var(--grade); border-radius: var(--raio);
+  padding: 14px 16px; margin: 16px 0;
+}
+.exemplo > b:first-child { display: block; margin-bottom: 4px; }
+.passos { margin: 8px 0 0; padding-left: 1.3em; }
+.passos li { margin: 4px 0; }
+
+/* marca-texto em linha */
+.mt { padding: 0 3px; border-radius: 3px; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+.mt.rosa { background: var(--mt-rosa); }
+.mt.verde { background: var(--mt-verde); }
+.mt.amarelo { background: var(--mt-amarelo); }
+.mt.azul { background: var(--mt-azul); }
+
+/* fração montada em HTML */
+.fr { display: inline-flex; flex-direction: column; vertical-align: middle; text-align: center; line-height: 1.15; margin: 0 2px; }
+.fr > span:first-child { border-bottom: 1.6px solid currentColor; padding: 0 3px 1px; }
+.fr > span:last-child { padding: 1px 3px 0; }
+.mat { white-space: nowrap; font-variant-numeric: lining-nums; }
+.formula { font-size: 1.2rem; text-align: center; margin: 12px 0; }
+
+/* figura sobre papel quadriculado */
+.figura {
+  background-color: var(--quadro);
+  background-image:
+    linear-gradient(var(--grade) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grade) 1px, transparent 1px);
+  background-size: 20px 20px;
+  border: 1px solid var(--grade); border-radius: var(--raio);
+  padding: 10px; margin: 14px 0;
+}
+.figura svg { display: block; width: 100%; height: auto; }
+.legenda { font-size: 0.92rem; color: var(--tinta-2); margin-top: 6px; }
+
+/* controles deslizantes */
+.controles { display: grid; gap: 10px; margin: 10px 0; }
+.controle { display: grid; grid-template-columns: 7.5em 1fr 4.2em; align-items: center; gap: 10px; }
+.controle label { font-weight: 700; }
+.controle output { font-variant-numeric: tabular-nums; text-align: right; font-weight: 700; }
+input[type="range"] { width: 100%; accent-color: var(--tinta); height: 28px; }
+
+/* leitura ao vivo (valores) */
+.leitura { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 8px; margin: 10px 0; }
+.leitura div { background: #fff; border: 1px solid var(--grade); border-radius: 8px; padding: 8px 10px; }
+.leitura small { display: block; color: var(--tinta-2); font-size: 0.82rem; }
+.leitura b { font-variant-numeric: tabular-nums; }
+
+table.tab { border-collapse: collapse; margin: 12px 0; background: #fff; font-variant-numeric: lining-nums; }
+table.tab th, table.tab td { border: 1px solid var(--grade); padding: 8px 14px; text-align: center; }
+table.tab th { background: #eef4fa; }
+.rolar { overflow-x: auto; }
+
+/* botões */
+.btn {
+  border: none; border-radius: 999px; padding: 11px 20px; cursor: pointer;
+  background: var(--tinta); color: #fff; font-weight: 700;
+}
+.btn:hover { background: #2c4f7c; }
+.btn.claro { background: #fff; color: var(--tinta); border: 2px solid var(--tinta); }
+.btn.claro:hover { background: #eef4fa; }
+.btn:disabled { opacity: 0.45; cursor: default; }
+.linha-btn { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin: 12px 0; }
+
+/* ---------- placar ---------- */
+.placar { display: flex; gap: 16px; flex-wrap: wrap; font-weight: 700; margin: 6px 0 12px; }
+.placar span { background: #fff; border: 1px solid var(--grade); border-radius: 999px; padding: 4px 12px; font-variant-numeric: tabular-nums; }
+
+/* ---------- questão de múltipla escolha ---------- */
+.questao { background: #fff; border: 1px solid var(--grade); border-radius: var(--raio); padding: 16px; }
+.questao .tema { font-size: 0.85rem; color: var(--tinta-2); margin: 0 0 6px; }
+.questao .enun { font-size: 1.08rem; margin: 0 0 10px; }
+.opcoes { display: grid; gap: 8px; margin-top: 12px; }
+.opcao {
+  text-align: left; background: #fff; border: 2px solid var(--grade); border-radius: 9px;
+  padding: 10px 12px; cursor: pointer; display: flex; gap: 10px; align-items: center; min-height: 48px;
+}
+.opcao:hover:not(:disabled) { border-color: var(--tinta-2); }
+.opcao .letra { flex: 0 0 auto; width: 1.8em; height: 1.8em; border-radius: 50%; background: #eef4fa; display: grid; place-items: center; font-weight: 700; font-size: 0.9rem; }
+.opcao:disabled { cursor: default; }
+.opcao.certa { border-color: var(--certo); background: var(--certo-bg); }
+.opcao.errada { border-color: var(--errado); background: var(--errado-bg); }
+.resolucao { margin-top: 14px; border-top: 2px dashed var(--grade); padding-top: 12px; }
+.resolucao .veredito { font-weight: 700; margin: 0 0 6px; }
+.resolucao .veredito.ok { color: var(--certo); }
+.resolucao .veredito.nok { color: var(--errado); }
+.resolucao .porque { background: var(--errado-bg); border-radius: 8px; padding: 8px 12px; margin: 8px 0; }
+
+.filtros { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0 14px; }
+.filtros label { background: #fff; border: 1px solid var(--grade); border-radius: 999px; padding: 4px 12px; cursor: pointer; font-size: 0.92rem; }
+.filtros input { accent-color: var(--tinta); }
+
+/* ---------- jogo ---------- */
+.jogo-topo { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+.cronometro { font-variant-numeric: tabular-nums; font-weight: 700; font-size: 1.3rem; }
+.pedido { font-size: 1.2rem; font-weight: 700; text-align: center; margin: 8px 0; min-height: 1.6em; }
+.flash-ok { animation: flashok 0.35s; }
+.flash-erro { animation: flasherro 0.35s; }
+@keyframes flashok { 50% { background-color: var(--certo-bg); } }
+@keyframes flasherro { 50% { background-color: var(--errado-bg); } }
+
+/* ---------- relatório ---------- */
+.rel-item { border-bottom: 1px solid var(--grade); padding: 10px 0; }
+.rel-item .st { font-weight: 700; }
+.rel-item .st.ok { color: var(--certo); }
+.rel-item .st.nok { color: var(--errado); }
+.rel-item details { margin-top: 4px; }
+.rel-item summary { cursor: pointer; color: var(--tinta-2); }
+.nome-aluno { padding: 9px 12px; border: 2px solid var(--grade); border-radius: 8px; min-width: 240px; }
+
+.rodape { max-width: 880px; margin: 0 auto; padding: 16px; color: var(--tinta-2); font-size: 0.85rem; border-top: 1px solid var(--grade); }
+
+@media (max-width: 560px) {
+  body { font-size: 16px; }
+  .topo h1 { font-size: 1.45rem; }
+  .controle { grid-template-columns: 5.5em 1fr 3.6em; gap: 6px; }
+  .questao { padding: 12px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+
+/* ---------- impressão: só o relatório ---------- */
+@media print {
+  body { background: #fff; font-size: 12pt; }
+  .abas, .topo .voltar, .rodape, .nao-imprimir, .btn { display: none !important; }
+  .painel { display: none !important; }
+  .painel.imprimir { display: block !important; }
+  .rel-item details > *:not(summary) { display: block !important; }
+  .rel-item summary { display: none; }
+  .rel-item { break-inside: avoid; }
+}
+
+.capa { border-bottom: 2px solid var(--margem); background-color: var(--quadro);
+  background-image: linear-gradient(var(--grade) 1px, transparent 1px), linear-gradient(90deg, var(--grade) 1px, transparent 1px);
+  background-size: 20px 20px; }
+.capa-in { max-width: 880px; margin: 0 auto; padding: 40px 16px 28px; }
+.capa h1 { font-size: 2.3rem; line-height: 1.1; margin: 0 0 8px; letter-spacing: -0.015em; }
+.capa p { margin: 0; color: var(--tinta-2); }
+.capa .nota { margin-top: 14px; }
+.materia { margin: 34px 0; }
+.materia h2 { margin-bottom: 4px; }
+.fichas { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 14px; margin-top: 14px; }
+.ficha { display: grid; grid-template-rows: auto 1fr; gap: 0; background: #fff; border: 1px solid var(--grade);
+  border-radius: var(--raio); text-decoration: none; color: var(--tinta); overflow: hidden; }
+.ficha:hover { border-color: var(--tinta-2); }
+.ficha .desenho { border-bottom: 1px solid var(--grade); background-color: var(--quadro);
+  background-image: linear-gradient(var(--grade) 1px, transparent 1px), linear-gradient(90deg, var(--grade) 1px, transparent 1px);
+  background-size: 14px 14px; padding: 8px; }
+.ficha .desenho svg { display: block; width: 100%; height: 130px; }
+.ficha .txt { padding: 12px 14px 14px; }
+.ficha b { font-size: 1.12rem; display: block; }
+.ficha span { color: var(--tinta-2); font-size: 0.95rem; }
+.ficha.breve { opacity: 0.6; pointer-events: none; }
+</style>
+</head>
+<body>
+<header class="capa">
+  <div class="capa-in">
+    <h1>Aulas de Matemática e Física</h1>
+    <p>Teoria com figuras que mexem, um jogo para fixar e exercícios que nunca acabam, sempre com a justificativa.</p>
+    <p class="nota">Funciona no celular, sem instalar nada. Seu desempenho fica salvo no próprio aparelho, na aba "Meu relatório".</p>
+  </div>
+</header>
+<main>
+  <section class="materia">
+    <h2>Matemática · 1º ano do Ensino Médio</h2>
+    <div class="fichas">
+      <a class="ficha" href="trigonometria.html">
+        <div class="desenho" id="d-trig"></div>
+        <div class="txt"><b>Trigonometria no triângulo retângulo</b><span>Seno, cosseno, tangente, ângulos notáveis e problemas do dia a dia.</span></div>
+      </a>
+      <a class="ficha" href="funcao-quadratica.html">
+        <div class="desenho" id="d-quad"></div>
+        <div class="txt"><b>Função quadrática</b><span>Parábola, Bhaskara, vértice, máximo e mínimo, soma e produto.</span></div>
+      </a>
+    </div>
+  </section>
+  <section class="materia">
+    <h2>Física</h2>
+    <div class="fichas">
+      <div class="ficha breve" aria-disabled="true">
+        <div class="desenho" id="d-fis"></div>
+        <div class="txt"><b>Em breve</b><span>Novos materiais vão aparecer aqui.</span></div>
+      </div>
+    </div>
+  </section>
+  <section class="materia">
+    <h2>Como usar</h2>
+    <ol class="passos">
+      <li>Leia a <b>Teoria</b> e mexa nas figuras.</li>
+      <li>Treine no <b>Jogo</b>.</li>
+      <li>Faça quantos <b>Exercícios</b> quiser: depois de cada resposta aparece a justificativa.</li>
+      <li>No <b>Meu relatório</b>, escreva seu nome e salve em PDF ou copie o resumo para enviar ao professor.</li>
+    </ol>
+  </section>
+</main>
+<footer class="rodape">Material de apoio para estudo · elaborado por Hiremar Soares.</footer>
+<script>
+/* =========================================================
+   Funções comuns: números, frações, abas, questões e relatório
+   ========================================================= */
+const U = {
+  // número inteiro aleatório entre a e b (inclusive)
+  rand(a, b) { return a + Math.floor(Math.random() * (b - a + 1)); },
+  pick(lista) { return lista[Math.floor(Math.random() * lista.length)]; },
+  shuffle(lista) {
+    const v = lista.slice();
+    for (let i = v.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [v[i], v[j]] = [v[j], v[i]]; }
+    return v;
+  },
+  mdc(a, b) { a = Math.abs(a); b = Math.abs(b); while (b) [a, b] = [b, a % b]; return a || 1; },
+
+  // número no formato brasileiro: vírgula decimal e sinal de menos tipográfico
+  num(x, casas = 2) {
+    if (Math.abs(x) < 1e-9) x = 0;
+    let s = (Math.round(x * 10 ** casas) / 10 ** casas).toString();
+    return s.replace("-", "−").replace(".", ",");
+  },
+  // fração em HTML; simplifica e vira inteiro quando der
+  fr(n, d, simplificar = true) {
+    if (d < 0) { n = -n; d = -d; }
+    if (simplificar) { const g = U.mdc(n, d); n /= g; d /= g; }
+    if (d === 1) return U.num(n);
+    const sinal = n < 0 ? "−" : "";
+    return `${sinal}<span class="fr"><span>${Math.abs(n)}</span><span>${d}</span></span>`;
+  },
+  // fração com conteúdo livre em cima e embaixo (ex.: "√3" sobre "2")
+  frx(cima, baixo) { return `<span class="fr"><span>${cima}</span><span>${baixo}</span></span>`; },
+  // coeficiente × √r  (r = 1, 2 ou 3), ex.: raiz(5,3) = "5√3"
+  raiz(coef, r) {
+    if (r === 1) return U.num(coef);
+    if (coef === 1) return `√${r}`;
+    if (coef === -1) return `−√${r}`;
+    return `${U.num(coef)}√${r}`;
+  },
+  // escreve o polinômio ax² + bx + c bonitinho
+  poli(a, b, c, nome = "f(x)") {
+    const termos = [];
+    const termo = (k, x) => {
+      if (Math.abs(k) < 1e-9) return;
+      const neg = k < 0, v = Math.abs(k);
+      const coef = (v === 1 && x) ? "" : U.num(v);
+      termos.push({ neg, txt: coef + x });
+    };
+    termo(a, "x²"); termo(b, "x"); termo(c, "");
+    if (!termos.length) return `${nome} = 0`;
+    let s = (termos[0].neg ? "−" : "") + termos[0].txt;
+    for (const t of termos.slice(1)) s += (t.neg ? " − " : " + ") + t.txt;
+    return nome ? `${nome} = ${s}` : s;
+  },
+  texto(html) { const d = document.createElement("div"); d.innerHTML = html; return d.textContent.replace(/\s+/g, " ").trim(); },
+};
+
+/* ---------- abas ---------- */
+function iniciarAbas() {
+  const abas = [...document.querySelectorAll(".aba")];
+  const mostrar = (id) => {
+    abas.forEach((b) => b.setAttribute("aria-selected", b.dataset.aba === id ? "true" : "false"));
+    document.querySelectorAll(".painel").forEach((p) => { p.hidden = p.id !== id; });
+    document.dispatchEvent(new CustomEvent("aba", { detail: id }));
+    try { history.replaceState(null, "", "#" + id); } catch (e) {}
+  };
+  abas.forEach((b) => b.addEventListener("click", () => { mostrar(b.dataset.aba); window.scrollTo({ top: 0 }); }));
+  const inicial = location.hash.slice(1);
+  mostrar(abas.some((b) => b.dataset.aba === inicial) ? inicial : abas[0].dataset.aba);
+}
+
+/* ---------- histórico (fica salvo no próprio celular/computador) ---------- */
+const Hist = {
+  CHAVE: "aulasMF_historico",
+  itens: [],
+  nome: "",
+  carregar() {
+    try {
+      const d = JSON.parse(localStorage.getItem(this.CHAVE) || "{}");
+      this.itens = d.itens || []; this.nome = d.nome || "";
+    } catch (e) {}
+  },
+  salvar() { try { localStorage.setItem(this.CHAVE, JSON.stringify({ itens: this.itens.slice(-300), nome: this.nome })); } catch (e) {} },
+  add(item) { this.itens.push(item); this.salvar(); document.dispatchEvent(new Event("hist")); },
+};
+Hist.carregar();
+
+/* ---------- motor das questões ---------- */
+/* Cada gerador devolve:
+   { tema, enun (html), fig (svg ou ""), certa (html), erradas: [{html, porque}], resol (html) } */
+function criarQuiz({ raiz, modulo, geradores }) {
+  const chaves = Object.keys(geradores);
+  let ativos = new Set(chaves);
+  let acertos = 0, total = 0, seq = 0;
+
+  raiz.innerHTML = `
+    <div class="filtros nao-imprimir" aria-label="Escolha os assuntos">
+      ${chaves.map((k) => `<label><input type="checkbox" value="${k}" checked> ${geradores[k].nome}</label>`).join("")}
+    </div>
+    <div class="placar"><span>Acertos: <b class="q-ac">0</b> de <b class="q-to">0</b></span><span>Sequência: <b class="q-seq">0</b> 🔥</span></div>
+    <div class="questao" aria-live="polite"></div>
+    <div class="linha-btn"><button class="btn q-prox">Próxima questão</button></div>`;
+  const caixa = raiz.querySelector(".questao");
+
+  raiz.querySelectorAll(".filtros input").forEach((cb) => cb.addEventListener("change", () => {
+    if (cb.checked) ativos.add(cb.value); else ativos.delete(cb.value);
+    if (!ativos.size) { ativos.add(cb.value); cb.checked = true; }
+    nova();
+  }));
+  raiz.querySelector(".q-prox").addEventListener("click", () => { nova(); caixa.scrollIntoView({ block: "nearest" }); });
+
+  function nova() {
+    const k = U.pick([...ativos]);
+    const q = geradores[k].gerar();
+    // remove alternativas repetidas (iguais à certa ou entre si)
+    const vistos = new Set([U.texto(q.certa)]);
+    const erradas = [];
+    for (const e of U.shuffle(q.erradas)) {
+      const t = U.texto(e.html);
+      if (!vistos.has(t)) { vistos.add(t); erradas.push(e); }
+      if (erradas.length === 3) break;
+    }
+    const ops = U.shuffle([{ html: q.certa, certa: true }, ...erradas]);
+    caixa.innerHTML = `
+      <p class="tema">${geradores[k].nome}</p>
+      <div class="enun">${q.enun}</div>
+      ${q.fig ? `<div class="figura">${q.fig}</div>` : ""}
+      <div class="opcoes">${ops.map((o, i) => `<button class="opcao" data-i="${i}"><span class="letra">${"ABCD"[i]}</span><span>${o.html}</span></button>`).join("")}</div>
+      <div class="resolucao" hidden></div>`;
+    caixa.querySelectorAll(".opcao").forEach((b) => b.addEventListener("click", () => responder(q, ops, +b.dataset.i, geradores[k].nome)));
+  }
+
+  function responder(q, ops, i, tema) {
+    const botoes = caixa.querySelectorAll(".opcao");
+    botoes.forEach((b, j) => { b.disabled = true; if (ops[j].certa) b.classList.add("certa"); });
+    const ok = ops[i].certa;
+    if (!ok) botoes[i].classList.add("errada");
+    total++; if (ok) { acertos++; seq++; } else seq = 0;
+    raiz.querySelector(".q-ac").textContent = acertos;
+    raiz.querySelector(".q-to").textContent = total;
+    raiz.querySelector(".q-seq").textContent = seq;
+    const r = caixa.querySelector(".resolucao");
+    r.hidden = false;
+    r.innerHTML = `
+      <p class="veredito ${ok ? "ok" : "nok"}">${ok ? "✔ Certo!" : "✘ Não foi dessa vez."} Veja a justificativa:</p>
+      ${!ok && ops[i].porque ? `<div class="porque"><b>Por que a sua resposta não serve:</b> ${ops[i].porque}</div>` : ""}
+      <div>${q.resol}</div>`;
+    Hist.add({ modulo, tema, enun: q.enun, fig: q.fig || "", escolhida: ops[i].html, certa: q.certa, ok, resol: q.resol, porque: ok ? "" : (ops[i].porque || ""), hora: Date.now() });
+  }
+
+  nova();
+  return { nova };
+}
+
+/* ---------- relatório ---------- */
+function iniciarRelatorio(raiz) {
+  raiz.innerHTML = `
+    <h2>Meu relatório</h2>
+    <p>Tudo o que você respondeu nos exercícios fica guardado aqui, <b>neste aparelho</b>. Coloque seu nome e salve em PDF ou copie o resumo para enviar ao professor.</p>
+    <div class="linha-btn nao-imprimir">
+      <input class="nome-aluno" type="text" placeholder="Seu nome e turma" aria-label="Seu nome e turma">
+    </div>
+    <div class="linha-btn nao-imprimir">
+      <button class="btn r-pdf">Salvar em PDF</button>
+      <button class="btn claro r-copiar">Copiar resumo</button>
+      <button class="btn claro r-apagar">Apagar histórico</button>
+    </div>
+    <p class="r-aviso nota" aria-live="polite"></p>
+    <div class="r-cab"></div>
+    <div class="r-lista"></div>`;
+  const nome = raiz.querySelector(".nome-aluno");
+  nome.value = Hist.nome;
+  nome.addEventListener("input", () => { Hist.nome = nome.value; Hist.salvar(); desenhar(); });
+  const aviso = raiz.querySelector(".r-aviso");
+
+  function porTema() {
+    const m = {};
+    for (const it of Hist.itens) {
+      const k = it.modulo + " — " + it.tema;
+      m[k] = m[k] || { ac: 0, to: 0 }; m[k].to++; if (it.ok) m[k].ac++;
+    }
+    return m;
+  }
+  function desenhar() {
+    const tot = Hist.itens.length, ac = Hist.itens.filter((i) => i.ok).length;
+    const m = porTema();
+    raiz.querySelector(".r-cab").innerHTML = `
+      <h3>${Hist.nome ? Hist.nome : "Aluno(a) sem nome"} — ${ac} ${ac === 1 ? "acerto" : "acertos"} em ${tot} ${tot === 1 ? "questão" : "questões"}${tot ? ` (${Math.round(100 * ac / tot)}%)` : ""}</h3>
+      ${tot ? `<div class="rolar"><table class="tab"><tr><th>Assunto</th><th>Acertos</th><th>Questões</th></tr>
+        ${Object.entries(m).map(([k, v]) => `<tr><td style="text-align:left">${k}</td><td>${v.ac}</td><td>${v.to}</td></tr>`).join("")}</table></div>` : ""}`;
+    raiz.querySelector(".r-lista").innerHTML = tot ? Hist.itens.slice().reverse().map((it, n) => `
+      <div class="rel-item">
+        <div><span class="st ${it.ok ? "ok" : "nok"}">${it.ok ? "✔ Acertou" : "✘ Errou"}</span> · ${it.modulo} — ${it.tema} · <small>${new Date(it.hora).toLocaleString("pt-BR")}</small></div>
+        <div>${it.enun}</div>
+        <details><summary>Ver resposta e justificativa</summary>
+          ${it.fig ? `<div class="figura" style="max-width:420px">${it.fig}</div>` : ""}
+          <p><b>Resposta marcada:</b> ${it.escolhida}<br><b>Resposta certa:</b> ${it.certa}</p>
+          ${it.porque ? `<p><b>Por que a marcada não serve:</b> ${it.porque}</p>` : ""}
+          <div>${it.resol}</div>
+        </details>
+      </div>`).join("") : `<p>Você ainda não respondeu nenhum exercício. Vá até a aba <b>Exercícios</b> e comece!</p>`;
+  }
+  raiz.querySelector(".r-pdf").addEventListener("click", () => {
+    document.querySelectorAll(".painel").forEach((p) => p.classList.remove("imprimir"));
+    raiz.closest(".painel").classList.add("imprimir");
+    raiz.querySelectorAll("details").forEach((d) => (d.open = true));
+    window.print();
+  });
+  raiz.querySelector(".r-copiar").addEventListener("click", async () => {
+    const tot = Hist.itens.length, ac = Hist.itens.filter((i) => i.ok).length;
+    const linhas = [`Relatório — ${Hist.nome || "sem nome"}`, `${ac} acertos em ${tot} questões`,
+      ...Object.entries(porTema()).map(([k, v]) => `• ${k}: ${v.ac}/${v.to}`)];
+    const txt = linhas.join("\n");
+    try { await navigator.clipboard.writeText(txt); aviso.textContent = "Resumo copiado! Agora é só colar na mensagem para o professor."; }
+    catch (e) { aviso.textContent = txt; }
+  });
+  let confirmar = false;
+  const bApagar = raiz.querySelector(".r-apagar");
+  bApagar.addEventListener("click", () => {
+    if (!confirmar) { confirmar = true; bApagar.textContent = "Toque de novo para apagar tudo"; setTimeout(() => { confirmar = false; bApagar.textContent = "Apagar histórico"; }, 4000); return; }
+    Hist.itens = []; Hist.salvar(); confirmar = false; bApagar.textContent = "Apagar histórico"; desenhar();
+  });
+  document.addEventListener("hist", desenhar);
+  window.addEventListener("afterprint", () => document.querySelectorAll(".painel").forEach((p) => p.classList.remove("imprimir")));
+  desenhar();
+}
+
+/* =========================================================
+   Desenhos em SVG usados nas páginas
+   ========================================================= */
+const COR = {
+  tinta: "#1d3557", tinta2: "#4a6283", grade: "#d6e4f2",
+  rosa: "#ff8cc6", verde: "#6fdc8c", amarelo: "#ffe14d", azul: "#8cc8ff", vermelho: "#e05561",
+};
+
+/* Triângulo retângulo.
+   co = cateto oposto ao ângulo marcado, ca = cateto adjacente.
+   O ângulo reto fica no vértice C; o ângulo marcado no vértice A.
+   Opções: rot (graus), flip, cores (marca-texto), clicavel, lab {opo, adj, hip}, ang (texto do ângulo) */
+function triangulo(o) {
+  const W = o.W || 420, H = o.H || 250, p = o.pad || 44;
+  const pts = { A: [0, 0], C: [o.ca, 0], B: [o.ca, o.co] };
+  const r = ((o.rot || 0) * Math.PI) / 180;
+  for (const k in pts) {
+    let [x, y] = pts[k];
+    if (o.flip) x = -x;
+    pts[k] = [x * Math.cos(r) - y * Math.sin(r), x * Math.sin(r) + y * Math.cos(r)];
+  }
+  const xs = Object.values(pts).map((v) => v[0]), ys = Object.values(pts).map((v) => v[1]);
+  const minx = Math.min(...xs), maxx = Math.max(...xs), miny = Math.min(...ys), maxy = Math.max(...ys);
+  const s = Math.min((W - 2 * p) / (maxx - minx || 1), (H - 2 * p) / (maxy - miny || 1));
+  const ox = (W - (maxx - minx) * s) / 2, oy = (H - (maxy - miny) * s) / 2;
+  const P = {};
+  for (const k in pts) P[k] = [ox + (pts[k][0] - minx) * s, H - (oy + (pts[k][1] - miny) * s)];
+
+  const ref = o.ref || "A";                       // vértice do ângulo de referência
+  const lados = { hip: ["A", "B"], opo: ref === "A" ? ["B", "C"] : ["A", "C"], adj: ref === "A" ? ["A", "C"] : ["B", "C"] };
+  const corLado = { hip: COR.amarelo, opo: COR.rosa, adj: COR.verde };
+  const f = (n) => n.toFixed(1);
+  let svg = "";
+
+  // marca-texto por baixo da tinta
+  for (const k of ["hip", "opo", "adj"]) {
+    const [a, b] = lados[k];
+    const ligado = o.cores === true || (Array.isArray(o.cores) && o.cores.includes(k));
+    if (ligado) svg += `<line x1="${f(P[a][0])}" y1="${f(P[a][1])}" x2="${f(P[b][0])}" y2="${f(P[b][1])}" stroke="${corLado[k]}" stroke-width="13" stroke-linecap="round" opacity="0.9"/>`;
+  }
+  // os três lados
+  svg += `<polygon points="${["A", "B", "C"].map((k) => P[k].map(f).join(",")).join(" ")}" fill="rgba(255,255,255,0.55)" stroke="${COR.tinta}" stroke-width="2.6" stroke-linejoin="round"/>`;
+  // ângulo reto em C
+  const unit = (a, b, t) => { const dx = P[b][0] - P[a][0], dy = P[b][1] - P[a][1], L = Math.hypot(dx, dy); return [(dx / L) * t, (dy / L) * t]; };
+  const u = unit("C", "A", 15), v = unit("C", "B", 15);
+  svg += `<path d="M${f(P.C[0] + u[0])},${f(P.C[1] + u[1])} L${f(P.C[0] + u[0] + v[0])},${f(P.C[1] + u[1] + v[1])} L${f(P.C[0] + v[0])},${f(P.C[1] + v[1])}" fill="none" stroke="${COR.tinta}" stroke-width="1.8"/>`;
+  // arco do ângulo marcado
+  const V = P[ref], n1 = P.C, n2 = ref === "A" ? P.B : P.A;
+  const a1 = Math.atan2(n1[1] - V[1], n1[0] - V[0]);
+  let d = Math.atan2(n2[1] - V[1], n2[0] - V[0]) - a1;
+  while (d > Math.PI) d -= 2 * Math.PI;
+  while (d <= -Math.PI) d += 2 * Math.PI;
+  const R = 30, a2 = a1 + d;
+  svg += `<path d="M${f(V[0] + R * Math.cos(a1))},${f(V[1] + R * Math.sin(a1))} A${R},${R} 0 0 ${d > 0 ? 1 : 0} ${f(V[0] + R * Math.cos(a2))},${f(V[1] + R * Math.sin(a2))}" fill="none" stroke="${COR.vermelho}" stroke-width="2.4"/>`;
+  const am = a1 + d / 2, ra = R + 14 + Math.max(0, String(o.ang || "α").length - 1) * 5.5;
+  svg += `<text x="${f(V[0] + ra * Math.cos(am))}" y="${f(V[1] + ra * Math.sin(am) + 6)}" text-anchor="middle" font-family="Kalam, cursive" font-size="19" fill="${COR.vermelho}" font-weight="700">${o.ang || "α"}</text>`;
+  // textos dos lados (afastados do centro do triângulo)
+  const G = [(P.A[0] + P.B[0] + P.C[0]) / 3, (P.A[1] + P.B[1] + P.C[1]) / 3];
+  const lab = o.lab || {};
+  for (const k of ["hip", "opo", "adj"]) {
+    if (lab[k] === undefined || lab[k] === "") continue;
+    const [a, b] = lados[k];
+    const M = [(P[a][0] + P[b][0]) / 2, (P[a][1] + P[b][1]) / 2];
+    let nx = M[0] - G[0], ny = M[1] - G[1]; const L = Math.hypot(nx, ny) || 1;
+    const txt = String(lab[k]), dist = 20 + Math.max(0, txt.length - 3) * (k === "hip" ? 3.2 : 1.2);
+    nx = (nx / L) * dist; ny = (ny / L) * dist;
+    svg += `<text x="${f(M[0] + nx)}" y="${f(M[1] + ny + 6)}" text-anchor="middle" font-family="Kalam, cursive" font-size="19" fill="${COR.tinta}" stroke="#fff" stroke-width="4" paint-order="stroke" font-weight="700">${lab[k]}</text>`;
+  }
+  // áreas de toque (jogo)
+  if (o.clicavel) {
+    for (const k of ["hip", "opo", "adj"]) {
+      const [a, b] = lados[k];
+      svg += `<line class="alvo" data-lado="${k}" x1="${f(P[a][0])}" y1="${f(P[a][1])}" x2="${f(P[b][0])}" y2="${f(P[b][1])}" stroke="transparent" stroke-width="34" stroke-linecap="round" style="cursor:pointer"/>`;
+    }
+  }
+  return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${o.desc || "Triângulo retângulo"}">${svg}</svg>`;
+}
+
+/* Gráfico de f(x) = ax² + bx + c sobre papel quadriculado.
+   Opções: x0, x1, y0, y1 (janela), pontos (marcar raízes/vértice/eixo y), numeros (escala nos eixos) */
+let _idGraf = 0;
+function grafico(o) {
+  const W = o.W || 420, H = o.H || 320;
+  const x0 = o.x0 ?? -8, x1 = o.x1 ?? 8, y0 = o.y0 ?? -10, y1 = o.y1 ?? 10;
+  const X = (x) => ((x - x0) / (x1 - x0)) * W, Y = (y) => H - ((y - y0) / (y1 - y0)) * H;
+  const f = (x) => o.a * x * x + o.b * x + o.c, r = (n) => n.toFixed(1);
+  const id = "cg" + ++_idGraf;
+  let s = `<defs><clipPath id="${id}"><rect x="0" y="0" width="${W}" height="${H}"/></clipPath></defs>`;
+  // grade de 1 em 1
+  for (let x = Math.ceil(x0); x <= x1; x++) s += `<line x1="${r(X(x))}" y1="0" x2="${r(X(x))}" y2="${H}" stroke="${COR.grade}" stroke-width="1"/>`;
+  for (let y = Math.ceil(y0); y <= y1; y++) s += `<line x1="0" y1="${r(Y(y))}" x2="${W}" y2="${r(Y(y))}" stroke="${COR.grade}" stroke-width="1"/>`;
+  // eixos
+  s += `<line x1="0" y1="${r(Y(0))}" x2="${W}" y2="${r(Y(0))}" stroke="${COR.tinta2}" stroke-width="1.6"/>
+        <line x1="${r(X(0))}" y1="0" x2="${r(X(0))}" y2="${H}" stroke="${COR.tinta2}" stroke-width="1.6"/>
+        <text x="${W - 12}" y="${r(Y(0) - 6)}" font-size="13" fill="${COR.tinta2}" font-style="italic">x</text>
+        <text x="${r(X(0) + 6)}" y="14" font-size="13" fill="${COR.tinta2}" font-style="italic">y</text>`;
+  if (o.numeros !== false) {
+    const passo = (x1 - x0) > 12 ? 2 : 1;
+    for (let x = Math.ceil(x0 / passo) * passo; x < x1; x += passo) if (x !== 0) s += `<text x="${r(X(x))}" y="${r(Y(0) + 15)}" font-size="11" text-anchor="middle" fill="${COR.tinta2}">${String(x).replace("-", "−")}</text>`;
+    const passoY = (y1 - y0) > 12 ? 2 : 1;
+    for (let y = Math.ceil(y0 / passoY) * passoY; y < y1; y += passoY) if (y !== 0) s += `<text x="${r(X(0) - 5)}" y="${r(Y(y) + 4)}" font-size="11" text-anchor="end" fill="${COR.tinta2}">${String(y).replace("-", "−")}</text>`;
+  }
+  // a curva
+  let d = "";
+  for (let i = 0; i <= 240; i++) {
+    const x = x0 + ((x1 - x0) * i) / 240;
+    let y = f(x); y = Math.max(y0 - 50, Math.min(y1 + 50, y));
+    d += (i ? "L" : "M") + r(X(x)) + "," + r(Y(y));
+  }
+  s += `<path d="${d}" fill="none" stroke="${COR.tinta}" stroke-width="3" clip-path="url(#${id})" stroke-linejoin="round"/>`;
+  // pontos importantes
+  const ponto = (x, y, cor, txt, dy = -12) => {
+    if (x < x0 || x > x1 || y < y0 || y > y1) return "";
+    return `<circle cx="${r(X(x))}" cy="${r(Y(y))}" r="9" fill="${cor}" opacity="0.9"/><circle cx="${r(X(x))}" cy="${r(Y(y))}" r="3.5" fill="${COR.tinta}"/>` +
+      (txt ? `<text x="${r(X(x))}" y="${r(Y(y) + dy)}" text-anchor="middle" font-family="Kalam, cursive" font-size="15" font-weight="700" fill="${COR.tinta}" stroke="#fff" stroke-width="4" paint-order="stroke">${txt}</text>` : "");
+  };
+  if (o.pontos && o.a !== 0) {
+    const D = o.b * o.b - 4 * o.a * o.c, xv = -o.b / (2 * o.a), yv = f(xv);
+    const fmt = (n) => U.num(n, 2);
+    s += ponto(0, o.c, COR.amarelo, "", 0);
+    if (o.rotulos && o.c >= y0 && o.c <= y1) s += `<text x="${r(X(0) - 12)}" y="${r(Y(o.c) + 5)}" text-anchor="end" font-family="Kalam, cursive" font-size="15" font-weight="700" fill="${COR.tinta}" stroke="#fff" stroke-width="4" paint-order="stroke">(0, ${fmt(o.c)})</text>`;
+    if (D >= 0) {
+      const ra = (-o.b - Math.sqrt(D)) / (2 * o.a), rb = (-o.b + Math.sqrt(D)) / (2 * o.a);
+      s += ponto(ra, 0, COR.rosa, o.rotulos ? fmt(ra) : "", o.a > 0 ? -12 : 22);
+      if (D > 0) s += ponto(rb, 0, COR.rosa, o.rotulos ? fmt(rb) : "", o.a > 0 ? -12 : 22);
+    }
+    s += ponto(xv, yv, COR.verde, o.rotulos ? `V(${fmt(xv)}, ${fmt(yv)})` : "", o.a > 0 ? 24 : -14);
+  }
+  if (o.extra) s += o.extra(X, Y);
+  return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${o.desc || "Gráfico de uma função quadrática"}">${s}</svg>`;
+}
+
+</script>
+<script>
+document.getElementById("d-trig").innerHTML = triangulo({ co: 3, ca: 4, cores: true, W: 300, H: 130, pad: 16, lab: {} }).replace("<svg ", '<svg preserveAspectRatio="xMidYMid meet" ');
+document.getElementById("d-quad").innerHTML = grafico({ a: 0.6, b: -1.2, c: -3, pontos: true, W: 300, H: 130, x0: -5, x1: 5, y0: -4.5, y1: 4, numeros: false });
+document.getElementById("d-fis").innerHTML = `<svg viewBox="0 0 300 130"><path d="M10,65 C45,10 80,10 115,65 S185,120 220,65 S290,10 300,40" fill="none" stroke="${COR.tinta2}" stroke-width="3" stroke-dasharray="6 6"/></svg>`;
+</script>
+</body>
+</html>

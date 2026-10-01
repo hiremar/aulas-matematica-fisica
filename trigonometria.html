@@ -1,0 +1,1276 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Trigonometria no triângulo retângulo</title>
+<meta name="description" content="Teoria interativa, jogo e exercícios infinitos com justificativa — 1º ano do Ensino Médio.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Kalam:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* =========================================================
+   Visual "caderno quadriculado" — comum a todas as páginas
+   ========================================================= */
+:root {
+  color-scheme: light;
+  --papel: #fbfdff;          /* fundo da página */
+  --quadro: #f4f8fc;         /* fundo das figuras */
+  --grade: #d6e4f2;          /* linhas do quadriculado */
+  --tinta: #1d3557;          /* "caneta azul": texto principal */
+  --tinta-2: #4a6283;        /* texto secundário */
+  --margem: #e05561;         /* linha vermelha da margem do caderno */
+  /* marca-textos: cada cor tem UM significado fixo */
+  --mt-rosa: #ff8cc6;        /* cateto oposto / raízes */
+  --mt-verde: #6fdc8c;       /* cateto adjacente / vértice */
+  --mt-amarelo: #ffe14d;     /* hipotenusa / onde corta o eixo y */
+  --mt-azul: #8cc8ff;
+  --certo: #157347;
+  --certo-bg: #e3f6ea;
+  --errado: #b42335;
+  --errado-bg: #fde8eb;
+  --raio: 10px;
+  --fonte: "Atkinson Hyperlegible", "Segoe UI", Roboto, Arial, sans-serif;
+  --mao: "Kalam", "Comic Sans MS", "Segoe Print", cursive;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--papel);
+  color: var(--tinta);
+  font-family: var(--fonte);
+  font-size: 17px;
+  line-height: 1.6;
+}
+a { color: var(--tinta); }
+button, input, select { font: inherit; color: inherit; }
+:focus-visible { outline: 3px solid var(--mt-azul); outline-offset: 2px; }
+
+/* ---------- topo ---------- */
+.topo {
+  border-bottom: 2px solid var(--margem);
+  background: #fff;
+}
+.topo-in {
+  max-width: 880px; margin: 0 auto; padding: 18px 16px 12px;
+  display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+}
+.topo h1 { margin: 0; font-size: 1.75rem; line-height: 1.15; letter-spacing: -0.01em; }
+.topo .sub { margin: 2px 0 0; color: var(--tinta-2); font-size: 0.95rem; }
+.voltar { font-size: 0.9rem; color: var(--tinta-2); text-decoration: none; white-space: nowrap; }
+.voltar:hover { text-decoration: underline; }
+
+/* ---------- abas (parecem as abas de um fichário) ---------- */
+.abas {
+  position: sticky; top: 0; z-index: 20;
+  background: rgba(251, 253, 255, 0.96);
+  backdrop-filter: blur(4px);
+  border-bottom: 1px solid var(--grade);
+}
+.abas-in {
+  max-width: 880px; margin: 0 auto; padding: 8px 16px 0;
+  display: flex; gap: 4px; overflow-x: auto; scrollbar-width: none;
+}
+.abas-in::-webkit-scrollbar { display: none; }
+.aba {
+  flex: 0 0 auto;
+  border: 1px solid var(--grade); border-bottom: none;
+  background: #eef4fa; color: var(--tinta-2);
+  padding: 8px 14px; border-radius: 9px 9px 0 0;
+  cursor: pointer; font-weight: 700; font-size: 0.95rem;
+}
+.aba[aria-selected="true"] { background: #fff; color: var(--tinta); box-shadow: inset 0 3px 0 var(--tinta); }
+
+/* ---------- conteúdo ---------- */
+main { max-width: 880px; margin: 0 auto; padding: 8px 16px 64px; }
+.painel[hidden] { display: none; }
+.painel > section { margin: 28px 0 40px; }
+h2 { font-size: 1.45rem; line-height: 1.25; margin: 0 0 10px; }
+h3 { font-size: 1.12rem; margin: 22px 0 6px; }
+p, li { max-width: 68ch; }
+.nota {                          /* anotação "do professor", escrita à mão */
+  font-family: var(--mao); font-size: 1.15rem; color: #2b59a8; line-height: 1.35;
+}
+.destaque {                      /* caixa de regra importante */
+  border-left: 5px solid var(--tinta); background: #fff;
+  padding: 12px 16px; margin: 14px 0; border-radius: 0 var(--raio) var(--raio) 0;
+  box-shadow: 0 1px 0 var(--grade);
+}
+.exemplo {                       /* exemplo resolvido */
+  background: #fff; border: 1px solid var(--grade); border-radius: var(--raio);
+  padding: 14px 16px; margin: 16px 0;
+}
+.exemplo > b:first-child { display: block; margin-bottom: 4px; }
+.passos { margin: 8px 0 0; padding-left: 1.3em; }
+.passos li { margin: 4px 0; }
+
+/* marca-texto em linha */
+.mt { padding: 0 3px; border-radius: 3px; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+.mt.rosa { background: var(--mt-rosa); }
+.mt.verde { background: var(--mt-verde); }
+.mt.amarelo { background: var(--mt-amarelo); }
+.mt.azul { background: var(--mt-azul); }
+
+/* fração montada em HTML */
+.fr { display: inline-flex; flex-direction: column; vertical-align: middle; text-align: center; line-height: 1.15; margin: 0 2px; }
+.fr > span:first-child { border-bottom: 1.6px solid currentColor; padding: 0 3px 1px; }
+.fr > span:last-child { padding: 1px 3px 0; }
+.mat { white-space: nowrap; font-variant-numeric: lining-nums; }
+.formula { font-size: 1.2rem; text-align: center; margin: 12px 0; }
+
+/* figura sobre papel quadriculado */
+.figura {
+  background-color: var(--quadro);
+  background-image:
+    linear-gradient(var(--grade) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grade) 1px, transparent 1px);
+  background-size: 20px 20px;
+  border: 1px solid var(--grade); border-radius: var(--raio);
+  padding: 10px; margin: 14px 0;
+}
+.figura svg { display: block; width: 100%; height: auto; }
+.legenda { font-size: 0.92rem; color: var(--tinta-2); margin-top: 6px; }
+
+/* controles deslizantes */
+.controles { display: grid; gap: 10px; margin: 10px 0; }
+.controle { display: grid; grid-template-columns: 7.5em 1fr 4.2em; align-items: center; gap: 10px; }
+.controle label { font-weight: 700; }
+.controle output { font-variant-numeric: tabular-nums; text-align: right; font-weight: 700; }
+input[type="range"] { width: 100%; accent-color: var(--tinta); height: 28px; }
+
+/* leitura ao vivo (valores) */
+.leitura { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 8px; margin: 10px 0; }
+.leitura div { background: #fff; border: 1px solid var(--grade); border-radius: 8px; padding: 8px 10px; }
+.leitura small { display: block; color: var(--tinta-2); font-size: 0.82rem; }
+.leitura b { font-variant-numeric: tabular-nums; }
+
+table.tab { border-collapse: collapse; margin: 12px 0; background: #fff; font-variant-numeric: lining-nums; }
+table.tab th, table.tab td { border: 1px solid var(--grade); padding: 8px 14px; text-align: center; }
+table.tab th { background: #eef4fa; }
+.rolar { overflow-x: auto; }
+
+/* botões */
+.btn {
+  border: none; border-radius: 999px; padding: 11px 20px; cursor: pointer;
+  background: var(--tinta); color: #fff; font-weight: 700;
+}
+.btn:hover { background: #2c4f7c; }
+.btn.claro { background: #fff; color: var(--tinta); border: 2px solid var(--tinta); }
+.btn.claro:hover { background: #eef4fa; }
+.btn:disabled { opacity: 0.45; cursor: default; }
+.linha-btn { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin: 12px 0; }
+
+/* ---------- placar ---------- */
+.placar { display: flex; gap: 16px; flex-wrap: wrap; font-weight: 700; margin: 6px 0 12px; }
+.placar span { background: #fff; border: 1px solid var(--grade); border-radius: 999px; padding: 4px 12px; font-variant-numeric: tabular-nums; }
+
+/* ---------- questão de múltipla escolha ---------- */
+.questao { background: #fff; border: 1px solid var(--grade); border-radius: var(--raio); padding: 16px; }
+.questao .tema { font-size: 0.85rem; color: var(--tinta-2); margin: 0 0 6px; }
+.questao .enun { font-size: 1.08rem; margin: 0 0 10px; }
+.opcoes { display: grid; gap: 8px; margin-top: 12px; }
+.opcao {
+  text-align: left; background: #fff; border: 2px solid var(--grade); border-radius: 9px;
+  padding: 10px 12px; cursor: pointer; display: flex; gap: 10px; align-items: center; min-height: 48px;
+}
+.opcao:hover:not(:disabled) { border-color: var(--tinta-2); }
+.opcao .letra { flex: 0 0 auto; width: 1.8em; height: 1.8em; border-radius: 50%; background: #eef4fa; display: grid; place-items: center; font-weight: 700; font-size: 0.9rem; }
+.opcao:disabled { cursor: default; }
+.opcao.certa { border-color: var(--certo); background: var(--certo-bg); }
+.opcao.errada { border-color: var(--errado); background: var(--errado-bg); }
+.resolucao { margin-top: 14px; border-top: 2px dashed var(--grade); padding-top: 12px; }
+.resolucao .veredito { font-weight: 700; margin: 0 0 6px; }
+.resolucao .veredito.ok { color: var(--certo); }
+.resolucao .veredito.nok { color: var(--errado); }
+.resolucao .porque { background: var(--errado-bg); border-radius: 8px; padding: 8px 12px; margin: 8px 0; }
+
+.filtros { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0 14px; }
+.filtros label { background: #fff; border: 1px solid var(--grade); border-radius: 999px; padding: 4px 12px; cursor: pointer; font-size: 0.92rem; }
+.filtros input { accent-color: var(--tinta); }
+
+/* ---------- jogo ---------- */
+.jogo-topo { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+.cronometro { font-variant-numeric: tabular-nums; font-weight: 700; font-size: 1.3rem; }
+.pedido { font-size: 1.2rem; font-weight: 700; text-align: center; margin: 8px 0; min-height: 1.6em; }
+.flash-ok { animation: flashok 0.35s; }
+.flash-erro { animation: flasherro 0.35s; }
+@keyframes flashok { 50% { background-color: var(--certo-bg); } }
+@keyframes flasherro { 50% { background-color: var(--errado-bg); } }
+
+/* ---------- relatório ---------- */
+.rel-item { border-bottom: 1px solid var(--grade); padding: 10px 0; }
+.rel-item .st { font-weight: 700; }
+.rel-item .st.ok { color: var(--certo); }
+.rel-item .st.nok { color: var(--errado); }
+.rel-item details { margin-top: 4px; }
+.rel-item summary { cursor: pointer; color: var(--tinta-2); }
+.nome-aluno { padding: 9px 12px; border: 2px solid var(--grade); border-radius: 8px; min-width: 240px; }
+
+.rodape { max-width: 880px; margin: 0 auto; padding: 16px; color: var(--tinta-2); font-size: 0.85rem; border-top: 1px solid var(--grade); }
+
+@media (max-width: 560px) {
+  body { font-size: 16px; }
+  .topo h1 { font-size: 1.45rem; }
+  .controle { grid-template-columns: 5.5em 1fr 3.6em; gap: 6px; }
+  .questao { padding: 12px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+
+/* ---------- impressão: só o relatório ---------- */
+@media print {
+  body { background: #fff; font-size: 12pt; }
+  .abas, .topo .voltar, .rodape, .nao-imprimir, .btn { display: none !important; }
+  .painel { display: none !important; }
+  .painel.imprimir { display: block !important; }
+  .rel-item details > *:not(summary) { display: block !important; }
+  .rel-item summary { display: none; }
+  .rel-item { break-inside: avoid; }
+}
+
+</style>
+</head>
+<body>
+
+<header class="topo">
+  <div class="topo-in">
+    <div>
+      <h1>Trigonometria no triângulo retângulo</h1>
+      <p class="sub">Seno, cosseno e tangente · 1º ano do Ensino Médio</p>
+    </div>
+    <a class="voltar" href="index.html">← Todos os assuntos</a>
+  </div>
+</header>
+
+<nav class="abas" aria-label="Partes da aula">
+  <div class="abas-in" role="tablist">
+    <button class="aba" role="tab" data-aba="teoria">📖 Teoria</button>
+    <button class="aba" role="tab" data-aba="jogo">🎯 Jogo</button>
+    <button class="aba" role="tab" data-aba="exercicios">✏️ Exercícios</button>
+    <button class="aba" role="tab" data-aba="saibamais">🔄 Saiba mais</button>
+    <button class="aba" role="tab" data-aba="relatorio">📋 Meu relatório</button>
+  </div>
+</nav>
+
+<main>
+<!-- ================= TEORIA ================= -->
+<div class="painel" id="teoria">
+
+  <section>
+    <h2>Primeiro: quem é quem no triângulo</h2>
+    <p>Todo triângulo retângulo tem um ângulo de 90° (o quadradinho). O lado que fica <b>de frente</b> para ele é o maior de todos: a <span class="mt amarelo">hipotenusa</span>. Os outros dois são os <b>catetos</b>.</p>
+    <p>Os catetos só ganham sobrenome quando escolhemos um ângulo agudo para olhar (aqui, o <b style="color:#e05561">α</b>):</p>
+    <ul>
+      <li><span class="mt rosa">cateto oposto</span>: fica do outro lado do triângulo, <b>de frente</b> para α;</li>
+      <li><span class="mt verde">cateto adjacente</span>: <b>encosta</b> em α (e não é a hipotenusa).</li>
+    </ul>
+
+    <div class="figura" id="fig-teoria"></div>
+    <div class="controles">
+      <div class="controle"><label for="sl-ang">Ângulo</label><input type="range" id="sl-ang" min="10" max="80" value="35"><output id="out-ang">35°</output></div>
+      <div class="controle"><label for="sl-hip">Hipotenusa</label><input type="range" id="sl-hip" min="4" max="12" step="0.5" value="8"><output id="out-hip">8</output></div>
+    </div>
+    <div class="linha-btn"><button class="btn claro" id="bt-ref">Olhar para o outro ângulo agudo</button></div>
+    <div class="leitura" id="leitura-teoria"></div>
+    <p class="nota">Mude o tamanho da hipotenusa e repare: as divisões (seno, cosseno, tangente) não mudam! Elas só dependem do ângulo.</p>
+    <p class="nota">Agora clique em "olhar para o outro ângulo": o oposto e o adjacente trocam de lugar. A hipotenusa nunca muda.</p>
+  </section>
+
+  <section>
+    <h2>As três razões trigonométricas</h2>
+    <p>Razão é só uma divisão entre dois lados. Para o ângulo α:</p>
+    <div class="rolar"><table class="tab">
+      <tr><th>Nome</th><th>Divisão</th></tr>
+      <tr><td><b>seno</b></td><td class="mat">sen α = <span class="fr"><span class="mt rosa">cateto oposto</span><span class="mt amarelo">hipotenusa</span></span></td></tr>
+      <tr><td><b>cosseno</b></td><td class="mat">cos α = <span class="fr"><span class="mt verde">cateto adjacente</span><span class="mt amarelo">hipotenusa</span></span></td></tr>
+      <tr><td><b>tangente</b></td><td class="mat">tg α = <span class="fr"><span class="mt rosa">cateto oposto</span><span class="mt verde">cateto adjacente</span></span></td></tr>
+    </table></div>
+    <div class="destaque"><b>SOH-CAH-TOA</b> (lê-se "sô-cá-tôa"): <b>S</b>eno = <b>O</b>posto/<b>H</b>ipotenusa, <b>C</b>osseno = <b>A</b>djacente/<b>H</b>ipotenusa, <b>T</b>angente = <b>O</b>posto/<b>A</b>djacente.</div>
+    <p>Como a hipotenusa é o maior lado, o seno e o cosseno de um ângulo agudo estão <b>sempre entre 0 e 1</b>. A tangente pode passar de 1.</p>
+  </section>
+
+  <section>
+    <h2>Exemplo resolvido: o triângulo 3, 4, 5</h2>
+    <div class="figura" id="fig-345" style="max-width:460px"></div>
+    <div class="exemplo">
+      <b>Calcule sen α, cos α e tg α.</b>
+      <ol class="passos">
+        <li>Identifique os lados olhando para α: <span class="mt rosa">oposto = 3</span>, <span class="mt verde">adjacente = 4</span>, <span class="mt amarelo">hipotenusa = 5</span>.</li>
+        <li>sen α = <span class="mat"><span class="fr"><span>3</span><span>5</span></span> = 0,6</span></li>
+        <li>cos α = <span class="mat"><span class="fr"><span>4</span><span>5</span></span> = 0,8</span></li>
+        <li>tg α = <span class="mat"><span class="fr"><span>3</span><span>4</span></span> = 0,75</span></li>
+      </ol>
+    </div>
+  </section>
+
+  <section>
+    <h2>Os ângulos notáveis: 30°, 45° e 60°</h2>
+    <p>Esses três ângulos aparecem em quase todo exercício, então vale a pena saber a tabela de cor (ou saber montá-la em 10 segundos):</p>
+    <div class="rolar"><table class="tab">
+      <tr><th></th><th>30°</th><th>45°</th><th>60°</th></tr>
+      <tr><th>sen</th><td><span class="fr"><span>1</span><span>2</span></span></td><td><span class="fr"><span>√2</span><span>2</span></span></td><td><span class="fr"><span>√3</span><span>2</span></span></td></tr>
+      <tr><th>cos</th><td><span class="fr"><span>√3</span><span>2</span></span></td><td><span class="fr"><span>√2</span><span>2</span></span></td><td><span class="fr"><span>1</span><span>2</span></span></td></tr>
+      <tr><th>tg</th><td><span class="fr"><span>√3</span><span>3</span></span></td><td>1</td><td>√3</td></tr>
+    </table></div>
+    <div class="destaque">
+      <b>Truque para montar a tabela:</b> na linha do seno escreva <b>1, 2, 3</b> em cima, coloque a raiz e divida tudo por 2: <span class="mat"><span class="fr"><span>√1</span><span>2</span></span>, <span class="fr"><span>√2</span><span>2</span></span>, <span class="fr"><span>√3</span><span>2</span></span></span>. O cosseno é a <b>mesma linha ao contrário</b>. A tangente é seno ÷ cosseno.
+    </div>
+    <h3>De onde vêm esses valores?</h3>
+    <p><b>45°:</b> corte um quadrado de lado 1 pela diagonal. A diagonal vale √2 (Pitágoras), então sen 45° = <span class="mat"><span class="fr"><span>1</span><span>√2</span></span> = <span class="fr"><span>√2</span><span>2</span></span></span>.</p>
+    <p><b>30° e 60°:</b> corte um triângulo equilátero de lado 2 ao meio. Sobra um triângulo com hipotenusa 2, um cateto 1 e o outro √3. Daí sen 30° = <span class="mat"><span class="fr"><span>1</span><span>2</span></span></span> e sen 60° = <span class="mat"><span class="fr"><span>√3</span><span>2</span></span></span>.</p>
+  </section>
+
+  <section>
+    <h2>Resolvendo problemas: o roteiro</h2>
+    <ol class="passos">
+      <li>Desenhe o triângulo e marque o ângulo que o problema dá.</li>
+      <li>Marque o lado que você <b>conhece</b> e o lado que você <b>quer</b>.</li>
+      <li>Veja quem eles são em relação ao ângulo (oposto, adjacente, hipotenusa).</li>
+      <li>Escolha a razão que liga esses dois lados (SOH, CAH ou TOA).</li>
+      <li>Monte a equação e isole o valor que falta.</li>
+    </ol>
+    <div class="figura" id="fig-aviao" style="max-width:520px"></div>
+    <div class="exemplo">
+      <b>Um avião decola formando 30° com a pista. Depois de percorrer 2 000 m em linha reta, a que altura ele está?</b>
+      <ol class="passos">
+        <li>O caminho percorrido (2 000 m) é a <span class="mt amarelo">hipotenusa</span>.</li>
+        <li>A altura é o lado de frente para os 30°: o <span class="mt rosa">cateto oposto</span>.</li>
+        <li>Oposto e hipotenusa → <b>seno</b>: sen 30° = <span class="mat"><span class="fr"><span>h</span><span>2000</span></span></span></li>
+        <li><span class="mat"><span class="fr"><span>1</span><span>2</span></span> = <span class="fr"><span>h</span><span>2000</span></span> ⟹ h = <b>1 000 m</b></span></li>
+      </ol>
+    </div>
+    <div class="exemplo">
+      <b>Um prédio projeta uma sombra de 20 m quando o Sol está a 45° de altura. Qual a altura do prédio?</b>
+      <ol class="passos">
+        <li>A sombra (20 m) <b>encosta</b> no ângulo de 45°: é o <span class="mt verde">cateto adjacente</span>.</li>
+        <li>A altura do prédio é o <span class="mt rosa">cateto oposto</span>.</li>
+        <li>Oposto e adjacente → <b>tangente</b>: tg 45° = <span class="mat"><span class="fr"><span>h</span><span>20</span></span></span></li>
+        <li><span class="mat">1 = <span class="fr"><span>h</span><span>20</span></span> ⟹ h = <b>20 m</b></span></li>
+      </ol>
+    </div>
+  </section>
+
+  <section>
+    <h2>Relações que ajudam muito</h2>
+    <h3>Teorema de Pitágoras</h3>
+    <p class="formula mat">(hipotenusa)² = (cateto)² + (cateto)²</p>
+    <h3>Relação fundamental</h3>
+    <p class="formula mat">sen² α + cos² α = 1</p>
+    <p>Ela vem de Pitágoras dividido por hipotenusa². Serve para achar o cosseno quando você só sabe o seno (e vice-versa).</p>
+    <h3>Tangente a partir do seno e do cosseno</h3>
+    <p class="formula mat">tg α = <span class="fr"><span>sen α</span><span>cos α</span></span></p>
+    <h3>Ângulos complementares (que somam 90°)</h3>
+    <p>Os dois ângulos agudos de um triângulo retângulo somam 90°. O oposto de um é o adjacente do outro, por isso:</p>
+    <p class="formula mat">sen α = cos (90° − α)</p>
+    <p>Exemplo: sen 30° = cos 60° = <span class="mat"><span class="fr"><span>1</span><span>2</span></span></span>.</p>
+  </section>
+</div>
+
+<!-- ================= JOGO ================= -->
+<div class="painel" id="jogo" hidden>
+  <section>
+    <h2>🎯 Caça aos lados</h2>
+    <p>O triângulo aparece girado e espelhado, igual nas provas. Toque no lado que o jogo pedir. Você tem <b>60 segundos</b>. Depois de 6 acertos, o jogo passa a pedir o lado que vai em cima ou embaixo em cada razão.</p>
+    <div class="jogo-topo">
+      <div class="placar"><span>Pontos: <b id="j-pontos">0</b></span><span>Sequência: <b id="j-seq">0</b> 🔥</span><span>Recorde: <b id="j-rec">0</b></span></div>
+      <div class="cronometro" id="j-tempo">60 s</div>
+    </div>
+    <p class="pedido" id="j-pedido" aria-live="polite">Toque em "Começar" para jogar.</p>
+    <div class="figura" id="j-fig" style="touch-action:manipulation"></div>
+    <div class="linha-btn"><button class="btn" id="j-iniciar">Começar</button></div>
+    <div id="j-final"></div>
+  </section>
+</div>
+
+<!-- ================= EXERCÍCIOS ================= -->
+<div class="painel" id="exercicios" hidden>
+  <section>
+    <h2>✏️ Exercícios sem fim</h2>
+    <p>As questões são sorteadas na hora: dá para treinar quanto quiser. Escolha os assuntos abaixo. Depois de responder, aparece a justificativa e tudo vai para o seu relatório.</p>
+    <div id="quiz"></div>
+  </section>
+</div>
+
+<!-- ================= SAIBA MAIS ================= -->
+<div class="painel" id="saibamais" hidden>
+  <section>
+    <h2>🔄 O ciclo trigonométrico (um gostinho do 2º ano)</h2>
+    <p>No triângulo, o ângulo só vai até 90°. Para ângulos maiores, usamos uma circunferência de raio 1. O ponto P anda sobre ela:</p>
+    <ul>
+      <li>a "sombra" de P no eixo horizontal é o <span class="mt verde">cosseno</span>;</li>
+      <li>a "sombra" de P no eixo vertical é o <span class="mt rosa">seno</span>.</li>
+    </ul>
+    <div class="figura" id="fig-ciclo" style="max-width:460px;margin-inline:auto"></div>
+    <div class="controles"><div class="controle"><label for="sl-ciclo">Ângulo</label><input type="range" id="sl-ciclo" min="0" max="360" value="30"><output id="out-ciclo">30°</output></div></div>
+    <div class="leitura" id="leitura-ciclo"></div>
+    <p class="nota">Leve o ângulo para 30°, 45° e 60° e compare com a tabela dos ângulos notáveis. Depois passe de 90° e veja o cosseno ficar negativo!</p>
+    <h3>Radianos</h3>
+    <p>Além de graus, ângulos podem ser medidos em <b>radianos</b>. Uma volta inteira (360°) vale 2π rad, então 180° = π rad. Para converter, use regra de três: 60° = <span class="mat"><span class="fr"><span>π</span><span>3</span></span></span> rad, 90° = <span class="mat"><span class="fr"><span>π</span><span>2</span></span></span> rad.</p>
+  </section>
+</div>
+
+<!-- ================= RELATÓRIO ================= -->
+<div class="painel" id="relatorio" hidden><section id="rel"></section></div>
+</main>
+
+<footer class="rodape">Material de apoio para estudo · elaborado por Hiremar Soares. As respostas ficam guardadas só neste aparelho.</footer>
+
+<script>
+/* =========================================================
+   Funções comuns: números, frações, abas, questões e relatório
+   ========================================================= */
+const U = {
+  // número inteiro aleatório entre a e b (inclusive)
+  rand(a, b) { return a + Math.floor(Math.random() * (b - a + 1)); },
+  pick(lista) { return lista[Math.floor(Math.random() * lista.length)]; },
+  shuffle(lista) {
+    const v = lista.slice();
+    for (let i = v.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [v[i], v[j]] = [v[j], v[i]]; }
+    return v;
+  },
+  mdc(a, b) { a = Math.abs(a); b = Math.abs(b); while (b) [a, b] = [b, a % b]; return a || 1; },
+
+  // número no formato brasileiro: vírgula decimal e sinal de menos tipográfico
+  num(x, casas = 2) {
+    if (Math.abs(x) < 1e-9) x = 0;
+    let s = (Math.round(x * 10 ** casas) / 10 ** casas).toString();
+    return s.replace("-", "−").replace(".", ",");
+  },
+  // fração em HTML; simplifica e vira inteiro quando der
+  fr(n, d, simplificar = true) {
+    if (d < 0) { n = -n; d = -d; }
+    if (simplificar) { const g = U.mdc(n, d); n /= g; d /= g; }
+    if (d === 1) return U.num(n);
+    const sinal = n < 0 ? "−" : "";
+    return `${sinal}<span class="fr"><span>${Math.abs(n)}</span><span>${d}</span></span>`;
+  },
+  // fração com conteúdo livre em cima e embaixo (ex.: "√3" sobre "2")
+  frx(cima, baixo) { return `<span class="fr"><span>${cima}</span><span>${baixo}</span></span>`; },
+  // coeficiente × √r  (r = 1, 2 ou 3), ex.: raiz(5,3) = "5√3"
+  raiz(coef, r) {
+    if (r === 1) return U.num(coef);
+    if (coef === 1) return `√${r}`;
+    if (coef === -1) return `−√${r}`;
+    return `${U.num(coef)}√${r}`;
+  },
+  // escreve o polinômio ax² + bx + c bonitinho
+  poli(a, b, c, nome = "f(x)") {
+    const termos = [];
+    const termo = (k, x) => {
+      if (Math.abs(k) < 1e-9) return;
+      const neg = k < 0, v = Math.abs(k);
+      const coef = (v === 1 && x) ? "" : U.num(v);
+      termos.push({ neg, txt: coef + x });
+    };
+    termo(a, "x²"); termo(b, "x"); termo(c, "");
+    if (!termos.length) return `${nome} = 0`;
+    let s = (termos[0].neg ? "−" : "") + termos[0].txt;
+    for (const t of termos.slice(1)) s += (t.neg ? " − " : " + ") + t.txt;
+    return nome ? `${nome} = ${s}` : s;
+  },
+  texto(html) { const d = document.createElement("div"); d.innerHTML = html; return d.textContent.replace(/\s+/g, " ").trim(); },
+};
+
+/* ---------- abas ---------- */
+function iniciarAbas() {
+  const abas = [...document.querySelectorAll(".aba")];
+  const mostrar = (id) => {
+    abas.forEach((b) => b.setAttribute("aria-selected", b.dataset.aba === id ? "true" : "false"));
+    document.querySelectorAll(".painel").forEach((p) => { p.hidden = p.id !== id; });
+    document.dispatchEvent(new CustomEvent("aba", { detail: id }));
+    try { history.replaceState(null, "", "#" + id); } catch (e) {}
+  };
+  abas.forEach((b) => b.addEventListener("click", () => { mostrar(b.dataset.aba); window.scrollTo({ top: 0 }); }));
+  const inicial = location.hash.slice(1);
+  mostrar(abas.some((b) => b.dataset.aba === inicial) ? inicial : abas[0].dataset.aba);
+}
+
+/* ---------- histórico (fica salvo no próprio celular/computador) ---------- */
+const Hist = {
+  CHAVE: "aulasMF_historico",
+  itens: [],
+  nome: "",
+  carregar() {
+    try {
+      const d = JSON.parse(localStorage.getItem(this.CHAVE) || "{}");
+      this.itens = d.itens || []; this.nome = d.nome || "";
+    } catch (e) {}
+  },
+  salvar() { try { localStorage.setItem(this.CHAVE, JSON.stringify({ itens: this.itens.slice(-300), nome: this.nome })); } catch (e) {} },
+  add(item) { this.itens.push(item); this.salvar(); document.dispatchEvent(new Event("hist")); },
+};
+Hist.carregar();
+
+/* ---------- motor das questões ---------- */
+/* Cada gerador devolve:
+   { tema, enun (html), fig (svg ou ""), certa (html), erradas: [{html, porque}], resol (html) } */
+function criarQuiz({ raiz, modulo, geradores }) {
+  const chaves = Object.keys(geradores);
+  let ativos = new Set(chaves);
+  let acertos = 0, total = 0, seq = 0;
+
+  raiz.innerHTML = `
+    <div class="filtros nao-imprimir" aria-label="Escolha os assuntos">
+      ${chaves.map((k) => `<label><input type="checkbox" value="${k}" checked> ${geradores[k].nome}</label>`).join("")}
+    </div>
+    <div class="placar"><span>Acertos: <b class="q-ac">0</b> de <b class="q-to">0</b></span><span>Sequência: <b class="q-seq">0</b> 🔥</span></div>
+    <div class="questao" aria-live="polite"></div>
+    <div class="linha-btn"><button class="btn q-prox">Próxima questão</button></div>`;
+  const caixa = raiz.querySelector(".questao");
+
+  raiz.querySelectorAll(".filtros input").forEach((cb) => cb.addEventListener("change", () => {
+    if (cb.checked) ativos.add(cb.value); else ativos.delete(cb.value);
+    if (!ativos.size) { ativos.add(cb.value); cb.checked = true; }
+    nova();
+  }));
+  raiz.querySelector(".q-prox").addEventListener("click", () => { nova(); caixa.scrollIntoView({ block: "nearest" }); });
+
+  function nova() {
+    const k = U.pick([...ativos]);
+    const q = geradores[k].gerar();
+    // remove alternativas repetidas (iguais à certa ou entre si)
+    const vistos = new Set([U.texto(q.certa)]);
+    const erradas = [];
+    for (const e of U.shuffle(q.erradas)) {
+      const t = U.texto(e.html);
+      if (!vistos.has(t)) { vistos.add(t); erradas.push(e); }
+      if (erradas.length === 3) break;
+    }
+    const ops = U.shuffle([{ html: q.certa, certa: true }, ...erradas]);
+    caixa.innerHTML = `
+      <p class="tema">${geradores[k].nome}</p>
+      <div class="enun">${q.enun}</div>
+      ${q.fig ? `<div class="figura">${q.fig}</div>` : ""}
+      <div class="opcoes">${ops.map((o, i) => `<button class="opcao" data-i="${i}"><span class="letra">${"ABCD"[i]}</span><span>${o.html}</span></button>`).join("")}</div>
+      <div class="resolucao" hidden></div>`;
+    caixa.querySelectorAll(".opcao").forEach((b) => b.addEventListener("click", () => responder(q, ops, +b.dataset.i, geradores[k].nome)));
+  }
+
+  function responder(q, ops, i, tema) {
+    const botoes = caixa.querySelectorAll(".opcao");
+    botoes.forEach((b, j) => { b.disabled = true; if (ops[j].certa) b.classList.add("certa"); });
+    const ok = ops[i].certa;
+    if (!ok) botoes[i].classList.add("errada");
+    total++; if (ok) { acertos++; seq++; } else seq = 0;
+    raiz.querySelector(".q-ac").textContent = acertos;
+    raiz.querySelector(".q-to").textContent = total;
+    raiz.querySelector(".q-seq").textContent = seq;
+    const r = caixa.querySelector(".resolucao");
+    r.hidden = false;
+    r.innerHTML = `
+      <p class="veredito ${ok ? "ok" : "nok"}">${ok ? "✔ Certo!" : "✘ Não foi dessa vez."} Veja a justificativa:</p>
+      ${!ok && ops[i].porque ? `<div class="porque"><b>Por que a sua resposta não serve:</b> ${ops[i].porque}</div>` : ""}
+      <div>${q.resol}</div>`;
+    Hist.add({ modulo, tema, enun: q.enun, fig: q.fig || "", escolhida: ops[i].html, certa: q.certa, ok, resol: q.resol, porque: ok ? "" : (ops[i].porque || ""), hora: Date.now() });
+  }
+
+  nova();
+  return { nova };
+}
+
+/* ---------- relatório ---------- */
+function iniciarRelatorio(raiz) {
+  raiz.innerHTML = `
+    <h2>Meu relatório</h2>
+    <p>Tudo o que você respondeu nos exercícios fica guardado aqui, <b>neste aparelho</b>. Coloque seu nome e salve em PDF ou copie o resumo para enviar ao professor.</p>
+    <div class="linha-btn nao-imprimir">
+      <input class="nome-aluno" type="text" placeholder="Seu nome e turma" aria-label="Seu nome e turma">
+    </div>
+    <div class="linha-btn nao-imprimir">
+      <button class="btn r-pdf">Salvar em PDF</button>
+      <button class="btn claro r-copiar">Copiar resumo</button>
+      <button class="btn claro r-apagar">Apagar histórico</button>
+    </div>
+    <p class="r-aviso nota" aria-live="polite"></p>
+    <div class="r-cab"></div>
+    <div class="r-lista"></div>`;
+  const nome = raiz.querySelector(".nome-aluno");
+  nome.value = Hist.nome;
+  nome.addEventListener("input", () => { Hist.nome = nome.value; Hist.salvar(); desenhar(); });
+  const aviso = raiz.querySelector(".r-aviso");
+
+  function porTema() {
+    const m = {};
+    for (const it of Hist.itens) {
+      const k = it.modulo + " — " + it.tema;
+      m[k] = m[k] || { ac: 0, to: 0 }; m[k].to++; if (it.ok) m[k].ac++;
+    }
+    return m;
+  }
+  function desenhar() {
+    const tot = Hist.itens.length, ac = Hist.itens.filter((i) => i.ok).length;
+    const m = porTema();
+    raiz.querySelector(".r-cab").innerHTML = `
+      <h3>${Hist.nome ? Hist.nome : "Aluno(a) sem nome"} — ${ac} ${ac === 1 ? "acerto" : "acertos"} em ${tot} ${tot === 1 ? "questão" : "questões"}${tot ? ` (${Math.round(100 * ac / tot)}%)` : ""}</h3>
+      ${tot ? `<div class="rolar"><table class="tab"><tr><th>Assunto</th><th>Acertos</th><th>Questões</th></tr>
+        ${Object.entries(m).map(([k, v]) => `<tr><td style="text-align:left">${k}</td><td>${v.ac}</td><td>${v.to}</td></tr>`).join("")}</table></div>` : ""}`;
+    raiz.querySelector(".r-lista").innerHTML = tot ? Hist.itens.slice().reverse().map((it, n) => `
+      <div class="rel-item">
+        <div><span class="st ${it.ok ? "ok" : "nok"}">${it.ok ? "✔ Acertou" : "✘ Errou"}</span> · ${it.modulo} — ${it.tema} · <small>${new Date(it.hora).toLocaleString("pt-BR")}</small></div>
+        <div>${it.enun}</div>
+        <details><summary>Ver resposta e justificativa</summary>
+          ${it.fig ? `<div class="figura" style="max-width:420px">${it.fig}</div>` : ""}
+          <p><b>Resposta marcada:</b> ${it.escolhida}<br><b>Resposta certa:</b> ${it.certa}</p>
+          ${it.porque ? `<p><b>Por que a marcada não serve:</b> ${it.porque}</p>` : ""}
+          <div>${it.resol}</div>
+        </details>
+      </div>`).join("") : `<p>Você ainda não respondeu nenhum exercício. Vá até a aba <b>Exercícios</b> e comece!</p>`;
+  }
+  raiz.querySelector(".r-pdf").addEventListener("click", () => {
+    document.querySelectorAll(".painel").forEach((p) => p.classList.remove("imprimir"));
+    raiz.closest(".painel").classList.add("imprimir");
+    raiz.querySelectorAll("details").forEach((d) => (d.open = true));
+    window.print();
+  });
+  raiz.querySelector(".r-copiar").addEventListener("click", async () => {
+    const tot = Hist.itens.length, ac = Hist.itens.filter((i) => i.ok).length;
+    const linhas = [`Relatório — ${Hist.nome || "sem nome"}`, `${ac} acertos em ${tot} questões`,
+      ...Object.entries(porTema()).map(([k, v]) => `• ${k}: ${v.ac}/${v.to}`)];
+    const txt = linhas.join("\n");
+    try { await navigator.clipboard.writeText(txt); aviso.textContent = "Resumo copiado! Agora é só colar na mensagem para o professor."; }
+    catch (e) { aviso.textContent = txt; }
+  });
+  let confirmar = false;
+  const bApagar = raiz.querySelector(".r-apagar");
+  bApagar.addEventListener("click", () => {
+    if (!confirmar) { confirmar = true; bApagar.textContent = "Toque de novo para apagar tudo"; setTimeout(() => { confirmar = false; bApagar.textContent = "Apagar histórico"; }, 4000); return; }
+    Hist.itens = []; Hist.salvar(); confirmar = false; bApagar.textContent = "Apagar histórico"; desenhar();
+  });
+  document.addEventListener("hist", desenhar);
+  window.addEventListener("afterprint", () => document.querySelectorAll(".painel").forEach((p) => p.classList.remove("imprimir")));
+  desenhar();
+}
+
+/* =========================================================
+   Desenhos em SVG usados nas páginas
+   ========================================================= */
+const COR = {
+  tinta: "#1d3557", tinta2: "#4a6283", grade: "#d6e4f2",
+  rosa: "#ff8cc6", verde: "#6fdc8c", amarelo: "#ffe14d", azul: "#8cc8ff", vermelho: "#e05561",
+};
+
+/* Triângulo retângulo.
+   co = cateto oposto ao ângulo marcado, ca = cateto adjacente.
+   O ângulo reto fica no vértice C; o ângulo marcado no vértice A.
+   Opções: rot (graus), flip, cores (marca-texto), clicavel, lab {opo, adj, hip}, ang (texto do ângulo) */
+function triangulo(o) {
+  const W = o.W || 420, H = o.H || 250, p = o.pad || 44;
+  const pts = { A: [0, 0], C: [o.ca, 0], B: [o.ca, o.co] };
+  const r = ((o.rot || 0) * Math.PI) / 180;
+  for (const k in pts) {
+    let [x, y] = pts[k];
+    if (o.flip) x = -x;
+    pts[k] = [x * Math.cos(r) - y * Math.sin(r), x * Math.sin(r) + y * Math.cos(r)];
+  }
+  const xs = Object.values(pts).map((v) => v[0]), ys = Object.values(pts).map((v) => v[1]);
+  const minx = Math.min(...xs), maxx = Math.max(...xs), miny = Math.min(...ys), maxy = Math.max(...ys);
+  const s = Math.min((W - 2 * p) / (maxx - minx || 1), (H - 2 * p) / (maxy - miny || 1));
+  const ox = (W - (maxx - minx) * s) / 2, oy = (H - (maxy - miny) * s) / 2;
+  const P = {};
+  for (const k in pts) P[k] = [ox + (pts[k][0] - minx) * s, H - (oy + (pts[k][1] - miny) * s)];
+
+  const ref = o.ref || "A";                       // vértice do ângulo de referência
+  const lados = { hip: ["A", "B"], opo: ref === "A" ? ["B", "C"] : ["A", "C"], adj: ref === "A" ? ["A", "C"] : ["B", "C"] };
+  const corLado = { hip: COR.amarelo, opo: COR.rosa, adj: COR.verde };
+  const f = (n) => n.toFixed(1);
+  let svg = "";
+
+  // marca-texto por baixo da tinta
+  for (const k of ["hip", "opo", "adj"]) {
+    const [a, b] = lados[k];
+    const ligado = o.cores === true || (Array.isArray(o.cores) && o.cores.includes(k));
+    if (ligado) svg += `<line x1="${f(P[a][0])}" y1="${f(P[a][1])}" x2="${f(P[b][0])}" y2="${f(P[b][1])}" stroke="${corLado[k]}" stroke-width="13" stroke-linecap="round" opacity="0.9"/>`;
+  }
+  // os três lados
+  svg += `<polygon points="${["A", "B", "C"].map((k) => P[k].map(f).join(",")).join(" ")}" fill="rgba(255,255,255,0.55)" stroke="${COR.tinta}" stroke-width="2.6" stroke-linejoin="round"/>`;
+  // ângulo reto em C
+  const unit = (a, b, t) => { const dx = P[b][0] - P[a][0], dy = P[b][1] - P[a][1], L = Math.hypot(dx, dy); return [(dx / L) * t, (dy / L) * t]; };
+  const u = unit("C", "A", 15), v = unit("C", "B", 15);
+  svg += `<path d="M${f(P.C[0] + u[0])},${f(P.C[1] + u[1])} L${f(P.C[0] + u[0] + v[0])},${f(P.C[1] + u[1] + v[1])} L${f(P.C[0] + v[0])},${f(P.C[1] + v[1])}" fill="none" stroke="${COR.tinta}" stroke-width="1.8"/>`;
+  // arco do ângulo marcado
+  const V = P[ref], n1 = P.C, n2 = ref === "A" ? P.B : P.A;
+  const a1 = Math.atan2(n1[1] - V[1], n1[0] - V[0]);
+  let d = Math.atan2(n2[1] - V[1], n2[0] - V[0]) - a1;
+  while (d > Math.PI) d -= 2 * Math.PI;
+  while (d <= -Math.PI) d += 2 * Math.PI;
+  const R = 30, a2 = a1 + d;
+  svg += `<path d="M${f(V[0] + R * Math.cos(a1))},${f(V[1] + R * Math.sin(a1))} A${R},${R} 0 0 ${d > 0 ? 1 : 0} ${f(V[0] + R * Math.cos(a2))},${f(V[1] + R * Math.sin(a2))}" fill="none" stroke="${COR.vermelho}" stroke-width="2.4"/>`;
+  const am = a1 + d / 2, ra = R + 14 + Math.max(0, String(o.ang || "α").length - 1) * 5.5;
+  svg += `<text x="${f(V[0] + ra * Math.cos(am))}" y="${f(V[1] + ra * Math.sin(am) + 6)}" text-anchor="middle" font-family="Kalam, cursive" font-size="19" fill="${COR.vermelho}" font-weight="700">${o.ang || "α"}</text>`;
+  // textos dos lados (afastados do centro do triângulo)
+  const G = [(P.A[0] + P.B[0] + P.C[0]) / 3, (P.A[1] + P.B[1] + P.C[1]) / 3];
+  const lab = o.lab || {};
+  for (const k of ["hip", "opo", "adj"]) {
+    if (lab[k] === undefined || lab[k] === "") continue;
+    const [a, b] = lados[k];
+    const M = [(P[a][0] + P[b][0]) / 2, (P[a][1] + P[b][1]) / 2];
+    let nx = M[0] - G[0], ny = M[1] - G[1]; const L = Math.hypot(nx, ny) || 1;
+    const txt = String(lab[k]), dist = 20 + Math.max(0, txt.length - 3) * (k === "hip" ? 3.2 : 1.2);
+    nx = (nx / L) * dist; ny = (ny / L) * dist;
+    svg += `<text x="${f(M[0] + nx)}" y="${f(M[1] + ny + 6)}" text-anchor="middle" font-family="Kalam, cursive" font-size="19" fill="${COR.tinta}" stroke="#fff" stroke-width="4" paint-order="stroke" font-weight="700">${lab[k]}</text>`;
+  }
+  // áreas de toque (jogo)
+  if (o.clicavel) {
+    for (const k of ["hip", "opo", "adj"]) {
+      const [a, b] = lados[k];
+      svg += `<line class="alvo" data-lado="${k}" x1="${f(P[a][0])}" y1="${f(P[a][1])}" x2="${f(P[b][0])}" y2="${f(P[b][1])}" stroke="transparent" stroke-width="34" stroke-linecap="round" style="cursor:pointer"/>`;
+    }
+  }
+  return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${o.desc || "Triângulo retângulo"}">${svg}</svg>`;
+}
+
+/* Gráfico de f(x) = ax² + bx + c sobre papel quadriculado.
+   Opções: x0, x1, y0, y1 (janela), pontos (marcar raízes/vértice/eixo y), numeros (escala nos eixos) */
+let _idGraf = 0;
+function grafico(o) {
+  const W = o.W || 420, H = o.H || 320;
+  const x0 = o.x0 ?? -8, x1 = o.x1 ?? 8, y0 = o.y0 ?? -10, y1 = o.y1 ?? 10;
+  const X = (x) => ((x - x0) / (x1 - x0)) * W, Y = (y) => H - ((y - y0) / (y1 - y0)) * H;
+  const f = (x) => o.a * x * x + o.b * x + o.c, r = (n) => n.toFixed(1);
+  const id = "cg" + ++_idGraf;
+  let s = `<defs><clipPath id="${id}"><rect x="0" y="0" width="${W}" height="${H}"/></clipPath></defs>`;
+  // grade de 1 em 1
+  for (let x = Math.ceil(x0); x <= x1; x++) s += `<line x1="${r(X(x))}" y1="0" x2="${r(X(x))}" y2="${H}" stroke="${COR.grade}" stroke-width="1"/>`;
+  for (let y = Math.ceil(y0); y <= y1; y++) s += `<line x1="0" y1="${r(Y(y))}" x2="${W}" y2="${r(Y(y))}" stroke="${COR.grade}" stroke-width="1"/>`;
+  // eixos
+  s += `<line x1="0" y1="${r(Y(0))}" x2="${W}" y2="${r(Y(0))}" stroke="${COR.tinta2}" stroke-width="1.6"/>
+        <line x1="${r(X(0))}" y1="0" x2="${r(X(0))}" y2="${H}" stroke="${COR.tinta2}" stroke-width="1.6"/>
+        <text x="${W - 12}" y="${r(Y(0) - 6)}" font-size="13" fill="${COR.tinta2}" font-style="italic">x</text>
+        <text x="${r(X(0) + 6)}" y="14" font-size="13" fill="${COR.tinta2}" font-style="italic">y</text>`;
+  if (o.numeros !== false) {
+    const passo = (x1 - x0) > 12 ? 2 : 1;
+    for (let x = Math.ceil(x0 / passo) * passo; x < x1; x += passo) if (x !== 0) s += `<text x="${r(X(x))}" y="${r(Y(0) + 15)}" font-size="11" text-anchor="middle" fill="${COR.tinta2}">${String(x).replace("-", "−")}</text>`;
+    const passoY = (y1 - y0) > 12 ? 2 : 1;
+    for (let y = Math.ceil(y0 / passoY) * passoY; y < y1; y += passoY) if (y !== 0) s += `<text x="${r(X(0) - 5)}" y="${r(Y(y) + 4)}" font-size="11" text-anchor="end" fill="${COR.tinta2}">${String(y).replace("-", "−")}</text>`;
+  }
+  // a curva
+  let d = "";
+  for (let i = 0; i <= 240; i++) {
+    const x = x0 + ((x1 - x0) * i) / 240;
+    let y = f(x); y = Math.max(y0 - 50, Math.min(y1 + 50, y));
+    d += (i ? "L" : "M") + r(X(x)) + "," + r(Y(y));
+  }
+  s += `<path d="${d}" fill="none" stroke="${COR.tinta}" stroke-width="3" clip-path="url(#${id})" stroke-linejoin="round"/>`;
+  // pontos importantes
+  const ponto = (x, y, cor, txt, dy = -12) => {
+    if (x < x0 || x > x1 || y < y0 || y > y1) return "";
+    return `<circle cx="${r(X(x))}" cy="${r(Y(y))}" r="9" fill="${cor}" opacity="0.9"/><circle cx="${r(X(x))}" cy="${r(Y(y))}" r="3.5" fill="${COR.tinta}"/>` +
+      (txt ? `<text x="${r(X(x))}" y="${r(Y(y) + dy)}" text-anchor="middle" font-family="Kalam, cursive" font-size="15" font-weight="700" fill="${COR.tinta}" stroke="#fff" stroke-width="4" paint-order="stroke">${txt}</text>` : "");
+  };
+  if (o.pontos && o.a !== 0) {
+    const D = o.b * o.b - 4 * o.a * o.c, xv = -o.b / (2 * o.a), yv = f(xv);
+    const fmt = (n) => U.num(n, 2);
+    s += ponto(0, o.c, COR.amarelo, "", 0);
+    if (o.rotulos && o.c >= y0 && o.c <= y1) s += `<text x="${r(X(0) - 12)}" y="${r(Y(o.c) + 5)}" text-anchor="end" font-family="Kalam, cursive" font-size="15" font-weight="700" fill="${COR.tinta}" stroke="#fff" stroke-width="4" paint-order="stroke">(0, ${fmt(o.c)})</text>`;
+    if (D >= 0) {
+      const ra = (-o.b - Math.sqrt(D)) / (2 * o.a), rb = (-o.b + Math.sqrt(D)) / (2 * o.a);
+      s += ponto(ra, 0, COR.rosa, o.rotulos ? fmt(ra) : "", o.a > 0 ? -12 : 22);
+      if (D > 0) s += ponto(rb, 0, COR.rosa, o.rotulos ? fmt(rb) : "", o.a > 0 ? -12 : 22);
+    }
+    s += ponto(xv, yv, COR.verde, o.rotulos ? `V(${fmt(xv)}, ${fmt(yv)})` : "", o.a > 0 ? 24 : -14);
+  }
+  if (o.extra) s += o.extra(X, Y);
+  return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${o.desc || "Gráfico de uma função quadrática"}">${s}</svg>`;
+}
+
+</script>
+<script>
+/* ================= TEORIA ================= */
+let refB = false;
+function desenharTeoria() {
+  const ang = +document.getElementById("sl-ang").value, H = +document.getElementById("sl-hip").value;
+  document.getElementById("out-ang").textContent = ang + "°";
+  document.getElementById("out-hip").textContent = U.num(H, 1);
+  const rad = ang * Math.PI / 180, co = H * Math.sin(rad), ca = H * Math.cos(rad);
+  // triângulo desenhado numa escala fixa: aumenta de verdade quando a hipotenusa cresce
+  const nomeAng = refB ? "β" : "α", angRef = refB ? 90 - ang : ang;
+  const opo = refB ? ca : co, adj = refB ? co : ca;
+  let fig = triangulo({ co, ca, cores: true, ref: refB ? "B" : "A", ang: refB ? `β=${90 - ang}°` : `α=${ang}°`, W: 460, H: 300, pad: 30 + (12 - H) * 9,
+    lab: { opo: "oposto " + U.num(opo, 1), adj: "adjacente " + U.num(adj, 1), hip: "hipotenusa " + U.num(H, 1) } });
+  document.getElementById("fig-teoria").innerHTML = fig;
+  const r = angRef * Math.PI / 180;
+  document.getElementById("leitura-teoria").innerHTML = `
+    <div><small>sen ${nomeAng} = oposto ÷ hipotenusa</small><b>${U.num(opo, 1)} ÷ ${U.num(H, 1)} = ${U.num(Math.sin(r), 3)}</b></div>
+    <div><small>cos ${nomeAng} = adjacente ÷ hipotenusa</small><b>${U.num(adj, 1)} ÷ ${U.num(H, 1)} = ${U.num(Math.cos(r), 3)}</b></div>
+    <div><small>tg ${nomeAng} = oposto ÷ adjacente</small><b>${U.num(opo, 1)} ÷ ${U.num(adj, 1)} = ${U.num(Math.tan(r), 3)}</b></div>`;
+}
+["sl-ang", "sl-hip"].forEach((id) => document.getElementById(id).addEventListener("input", desenharTeoria));
+document.getElementById("bt-ref").addEventListener("click", () => { refB = !refB; desenharTeoria(); });
+
+document.getElementById("fig-345").innerHTML = triangulo({ co: 3, ca: 4, cores: true, lab: { opo: "3", adj: "4", hip: "5" }, W: 420, H: 240 });
+document.getElementById("fig-aviao").innerHTML = triangulo({ co: 1, ca: Math.sqrt(3), cores: true, ang: "30°", lab: { opo: "h = ?", adj: "pista", hip: "2 000 m ✈" }, W: 480, H: 220 });
+
+/* ================= CICLO TRIGONOMÉTRICO ================= */
+function desenharCiclo() {
+  const g = +document.getElementById("sl-ciclo").value;
+  document.getElementById("out-ciclo").textContent = g + "°";
+  const W = 400, c = 200, R = 150, t = g * Math.PI / 180;
+  const px = c + R * Math.cos(t), py = c - R * Math.sin(t), f = (n) => n.toFixed(1);
+  const grande = g > 180 ? 1 : 0;
+  let s = `<line x1="20" y1="${c}" x2="${W - 20}" y2="${c}" stroke="${COR.tinta2}" stroke-width="1.5"/>
+    <line x1="${c}" y1="20" x2="${c}" y2="${W - 20}" stroke="${COR.tinta2}" stroke-width="1.5"/>
+    <circle cx="${c}" cy="${c}" r="${R}" fill="rgba(255,255,255,0.5)" stroke="${COR.tinta}" stroke-width="2.4"/>
+    <line x1="${c}" y1="${c}" x2="${f(px)}" y2="${c}" stroke="${COR.verde}" stroke-width="12" stroke-linecap="round"/>
+    <line x1="${c}" y1="${c}" x2="${c}" y2="${f(py)}" stroke="${COR.rosa}" stroke-width="12" stroke-linecap="round"/>
+    <line x1="${f(px)}" y1="${f(py)}" x2="${f(px)}" y2="${c}" stroke="${COR.tinta2}" stroke-dasharray="5 4"/>
+    <line x1="${f(px)}" y1="${f(py)}" x2="${c}" y2="${f(py)}" stroke="${COR.tinta2}" stroke-dasharray="5 4"/>
+    <line x1="${c}" y1="${c}" x2="${f(px)}" y2="${f(py)}" stroke="${COR.tinta}" stroke-width="2.4"/>`;
+  if (g > 0 && g < 360) s += `<path d="M${c + 34},${c} A34,34 0 ${grande} 0 ${f(c + 34 * Math.cos(t))},${f(c - 34 * Math.sin(t))}" fill="none" stroke="${COR.vermelho}" stroke-width="2.4"/>`;
+  s += `<circle cx="${f(px)}" cy="${f(py)}" r="7" fill="${COR.vermelho}"/>
+    <text x="${f(px + 12 * Math.cos(t) + 4)}" y="${f(py - 12 * Math.sin(t) + 5)}" font-family="Kalam, cursive" font-size="20" font-weight="700" fill="${COR.vermelho}">P</text>
+    <text x="${W - 26}" y="${c - 8}" font-size="14" fill="${COR.tinta2}">cos</text>
+    <text x="${c + 8}" y="32" font-size="14" fill="${COR.tinta2}">sen</text>
+    <text x="${c + R + 4}" y="${c + 18}" font-size="13" fill="${COR.tinta2}">1</text>
+    <text x="${c - R - 18}" y="${c + 18}" font-size="13" fill="${COR.tinta2}">−1</text>
+    <text x="${c + 6}" y="${c - R - 6}" font-size="13" fill="${COR.tinta2}">1</text>
+    <text x="${c + 6}" y="${c + R + 18}" font-size="13" fill="${COR.tinta2}">−1</text>`;
+  document.getElementById("fig-ciclo").innerHTML = `<svg viewBox="0 0 ${W} ${W}" role="img" aria-label="Ciclo trigonométrico com ângulo de ${g} graus">${s}</svg>`;
+  const quad = g === 0 || g === 90 || g === 180 || g === 270 || g === 360 ? "sobre um eixo" : g < 90 ? "1º quadrante" : g < 180 ? "2º quadrante" : g < 270 ? "3º quadrante" : "4º quadrante";
+  const mdcR = U.mdc(g, 180);
+  const rad = g === 0 ? "0" : `${g / mdcR === 1 ? "" : g / mdcR}π${180 / mdcR === 1 ? "" : "/" + 180 / mdcR}`;
+  document.getElementById("leitura-ciclo").innerHTML = `
+    <div><small>sen ${g}°</small><b>${U.num(Math.sin(t), 3)}</b></div>
+    <div><small>cos ${g}°</small><b>${U.num(Math.cos(t), 3)}</b></div>
+    <div><small>em radianos</small><b>${rad} rad</b></div>
+    <div><small>posição</small><b>${quad}</b></div>`;
+}
+document.getElementById("sl-ciclo").addEventListener("input", desenharCiclo);
+
+/* ================= JOGO: CAÇA AOS LADOS ================= */
+const Jogo = {
+  pontos: 0, seq: 0, acertos: 0, erros: 0, tempo: 60, timer: null, rodada: null, travado: false,
+  recorde() { try { return +localStorage.getItem("aulasMF_rec_trig") || 0; } catch (e) { return 0; } },
+  iniciar() {
+    Object.assign(this, { pontos: 0, seq: 0, acertos: 0, erros: 0, tempo: 60, travado: false });
+    document.getElementById("j-final").innerHTML = "";
+    document.getElementById("j-iniciar").hidden = true;
+    this.placar(); this.nova();
+    clearInterval(this.timer);
+    this.timer = setInterval(() => { this.tempo--; this.placar(); if (this.tempo <= 0) this.fim(); }, 1000);
+  },
+  placar() {
+    document.getElementById("j-pontos").textContent = this.pontos;
+    document.getElementById("j-seq").textContent = this.seq;
+    document.getElementById("j-rec").textContent = this.recorde();
+    document.getElementById("j-tempo").textContent = Math.max(0, this.tempo) + " s";
+  },
+  nova() {
+    const ang = U.pick(["α", "β", "θ", "x"]);
+    const nivel2 = this.acertos >= 6;
+    const pedidos1 = [
+      { t: `Toque no <b>cateto oposto</b> a ${ang}`, lado: "opo" },
+      { t: `Toque no <b>cateto adjacente</b> a ${ang}`, lado: "adj" },
+      { t: `Toque na <b>hipotenusa</b>`, lado: "hip" },
+    ];
+    const pedidos2 = [
+      { t: `Toque no lado que vai <b>em cima</b> no <b>seno</b> de ${ang}`, lado: "opo" },
+      { t: `Toque no lado que vai <b>em cima</b> no <b>cosseno</b> de ${ang}`, lado: "adj" },
+      { t: `Toque no lado que vai <b>embaixo</b> na <b>tangente</b> de ${ang}`, lado: "adj" },
+      { t: `Toque no lado que vai <b>em cima</b> na <b>tangente</b> de ${ang}`, lado: "opo" },
+      { t: `Toque no lado que vai <b>embaixo</b> no <b>seno</b> de ${ang}`, lado: "hip" },
+    ];
+    const ped = U.pick(nivel2 ? pedidos1.concat(pedidos2, pedidos2) : pedidos1);
+    this.rodada = { ang, ped, co: U.rand(3, 8), ca: U.rand(3, 8), rot: U.rand(0, 359), flip: Math.random() < 0.5 };
+    document.getElementById("j-pedido").innerHTML = (nivel2 ? "⭐ " : "") + ped.t;
+    this.desenhar(null);
+  },
+  desenhar(cores) {
+    const r = this.rodada;
+    const fig = document.getElementById("j-fig");
+    fig.innerHTML = triangulo({ co: r.co, ca: r.ca, rot: r.rot, flip: r.flip, ang: r.ang, clicavel: !cores, cores: cores || false, W: 420, H: 300, pad: 48 });
+    fig.querySelectorAll(".alvo").forEach((el) => el.addEventListener("click", () => this.tocar(el.dataset.lado)));
+  },
+  tocar(lado) {
+    if (this.travado || this.tempo <= 0) return;
+    const certo = lado === this.rodada.ped.lado;
+    const fig = document.getElementById("j-fig");
+    fig.classList.remove("flash-ok", "flash-erro"); void fig.offsetWidth;
+    fig.classList.add(certo ? "flash-ok" : "flash-erro");
+    if (certo) { this.seq++; this.acertos++; this.pontos += 10 * (1 + Math.floor(this.seq / 5)); }
+    else { this.seq = 0; this.erros++; }
+    this.placar();
+    // mostra a resposta certa pintada com a cor do marca-texto, e segue
+    this.travado = true;
+    this.desenhar([this.rodada.ped.lado]);
+    setTimeout(() => { this.travado = false; if (this.tempo > 0) this.nova(); }, certo ? 450 : 1100);
+  },
+  fim() {
+    clearInterval(this.timer);
+    const novo = this.pontos > this.recorde();
+    if (novo) try { localStorage.setItem("aulasMF_rec_trig", this.pontos); } catch (e) {}
+    this.placar();
+    document.getElementById("j-pedido").textContent = "Fim de jogo!";
+    document.getElementById("j-fig").innerHTML = "";
+    document.getElementById("j-final").innerHTML = `<div class="exemplo"><b>${novo ? "🏆 Novo recorde! " : ""}${this.pontos} pontos</b>
+      ${this.acertos} acertos e ${this.erros} erros.
+      ${this.erros > this.acertos / 3 ? "<p class='nota'>Dica: antes de tocar, ache primeiro o quadradinho (90°). O lado de frente pra ele é a hipotenusa. Depois, olhe para o ângulo pedido: o lado que encosta nele é o adjacente.</p>" : "<p class='nota'>Mandou bem! Agora treine nos Exercícios.</p>"}</div>`;
+    const b = document.getElementById("j-iniciar"); b.hidden = false; b.textContent = "Jogar de novo";
+  },
+};
+document.getElementById("j-iniciar").addEventListener("click", () => Jogo.iniciar());
+document.addEventListener("aba", (e) => { if (e.detail !== "jogo" && Jogo.timer && Jogo.tempo > 0) { clearInterval(Jogo.timer); Jogo.tempo = 0; Jogo.fim(); } });
+
+/* ================= EXERCÍCIOS ================= */
+const TRIPLAS = [[3, 4, 5], [5, 12, 13], [8, 15, 17], [7, 24, 25], [20, 21, 29], [6, 8, 10]];
+const NOT = {   // valores dos ângulos notáveis: [html, número]
+  sen: { 30: [U.frx("1", "2"), 0.5], 45: [U.frx("√2", "2"), Math.SQRT2 / 2], 60: [U.frx("√3", "2"), Math.sqrt(3) / 2] },
+  cos: { 30: [U.frx("√3", "2"), Math.sqrt(3) / 2], 45: [U.frx("√2", "2"), Math.SQRT2 / 2], 60: [U.frx("1", "2"), 0.5] },
+  tg:  { 30: [U.frx("√3", "3"), Math.sqrt(3) / 3], 45: ["1", 1], 60: ["√3", Math.sqrt(3)] },
+};
+const NOME = { sen: "seno", cos: "cosseno", tg: "tangente" };
+const LADOS = { sen: ["opo", "hip"], cos: ["adj", "hip"], tg: ["opo", "adj"] };
+const NOMELADO = { opo: '<span class="mt rosa">cateto oposto</span>', adj: '<span class="mt verde">cateto adjacente</span>', hip: '<span class="mt amarelo">hipotenusa</span>' };
+const TABELA_MINI = `<div class="rolar"><table class="tab"><tr><th></th><th>30°</th><th>45°</th><th>60°</th></tr>
+  <tr><th>sen</th><td>${NOT.sen[30][0]}</td><td>${NOT.sen[45][0]}</td><td>${NOT.sen[60][0]}</td></tr>
+  <tr><th>cos</th><td>${NOT.cos[30][0]}</td><td>${NOT.cos[45][0]}</td><td>${NOT.cos[60][0]}</td></tr>
+  <tr><th>tg</th><td>${NOT.tg[30][0]}</td><td>1</td><td>√3</td></tr></table></div>`;
+// valor do tipo  coef·√r  → texto (e "≈ decimal" quando tem raiz)
+const V = (c, r) => ({ c, r, html: U.raiz(c, r), num: c * Math.sqrt(r) });
+const comAprox = (v, un = "") => v.r === 1 ? `${v.html}${un}` : `${v.html}${un} <small>(≈ ${U.num(v.num, 2)}${un})</small>`;
+
+function triangulo3() {
+  const t = U.pick(TRIPLAS), k = t[2] <= 13 ? U.rand(1, 3) : 1;
+  const [p, q, h] = t.map((x) => x * k);
+  return Math.random() < 0.5 ? { co: p, ca: q, h } : { co: q, ca: p, h };
+}
+function figTri(co, ca, lab, ang = "α") {
+  return triangulo({ co, ca, rot: U.pick([0, 0, 90, 180, 270, 20, 200]), flip: Math.random() < 0.5, lab, ang, W: 400, H: 230 });
+}
+
+const GERADORES = {
+  razoes: {
+    nome: "Seno, cosseno e tangente",
+    gerar() {
+      const { co, ca, h } = triangulo3();
+      const fn = U.pick(["sen", "cos", "tg"]);
+      const val = { opo: co, adj: ca, hip: h };
+      const [cima, baixo] = LADOS[fn];
+      const certaFr = U.fr(val[cima], val[baixo], false);
+      const combos = [["opo", "hip"], ["adj", "hip"], ["opo", "adj"], ["adj", "opo"], ["hip", "opo"], ["hip", "adj"]];
+      const qual = { "opo,hip": "o seno", "adj,hip": "o cosseno", "opo,adj": "a tangente" };
+      const erradas = combos.filter(([a, b]) => !(a === cima && b === baixo)).map(([a, b]) => {
+        const chave = a + "," + b;
+        const porque = qual[chave]
+          ? `você dividiu ${NOMELADO[a]} por ${NOMELADO[b]}: essa divisão é ${qual[chave]} de α, não ${fn === "tg" ? "a" : "o"} ${NOME[fn]}.`
+          : `a fração ficou de cabeça para baixo. ${a === "hip" ? "A hipotenusa nunca vai em cima: seno e cosseno são sempre menores que 1." : "Na tangente, o oposto vai em cima e o adjacente embaixo."}`;
+        return { html: U.fr(val[a], val[b], false), porque };
+      });
+      const simp = U.fr(val[cima], val[baixo]);
+      return {
+        enun: `No triângulo retângulo abaixo, qual é o valor de <b>${fn} α</b>?`,
+        fig: figTri(co, ca, { opo: co, adj: ca, hip: h }),
+        certa: certaFr,
+        erradas,
+        resol: `<ol class="passos">
+          <li>Olhando para α: ${NOMELADO.opo} = ${co}, ${NOMELADO.adj} = ${ca} e ${NOMELADO.hip} = ${h} (é o maior lado, de frente para o ângulo reto).</li>
+          <li>${NOME[fn][0].toUpperCase() + NOME[fn].slice(1)} = ${NOMELADO[cima]} ÷ ${NOMELADO[baixo]}.</li>
+          <li>${fn} α = <span class="mat">${certaFr}${simp !== certaFr ? ` = ${simp}` : ""} ≈ ${U.num(val[cima] / val[baixo], 3)}</span></li></ol>`,
+      };
+    },
+  },
+
+  notaveis: {
+    nome: "Ângulos notáveis",
+    gerar() {
+      const todos = [];
+      for (const fn of ["sen", "cos", "tg"]) for (const a of [30, 45, 60]) todos.push({ fn, a, html: NOT[fn][a][0] });
+      const quemTem = (html) => todos.filter((x) => U.texto(x.html) === U.texto(html)).map((x) => `${x.fn} ${x.a}°`).join(" e ");
+      if (Math.random() < 0.6) {
+        const fn = U.pick(["sen", "cos", "tg"]), a = U.pick([30, 45, 60]);
+        const certa = NOT[fn][a][0];
+        const valores = [U.frx("1", "2"), U.frx("√2", "2"), U.frx("√3", "2"), U.frx("√3", "3"), "1", "√3", "2"];
+        return {
+          enun: `Qual é o valor de <b>${fn} ${a}°</b>?`,
+          certa,
+          erradas: valores.map((v) => ({ html: v, porque: quemTem(v) ? `esse é o valor de ${quemTem(v)}.` : (v === "2" ? "seno e cosseno nunca passam de 1, e nenhuma tangente notável vale 2." : "") })),
+          resol: `<p>Monte a tabela: na linha do seno, 1, 2, 3 com raiz e divididos por 2. O cosseno é a linha do seno ao contrário. A tangente é seno ÷ cosseno.</p>${TABELA_MINI}<p>Logo, <b>${fn} ${a}° = ${certa}</b>.</p>`,
+        };
+      }
+      const fn = U.pick(["sen", "cos", "tg"]), a = U.pick([30, 60, 45]);
+      const certa = `${a}°`;
+      return {
+        enun: `Sabendo que α é um ângulo agudo e que <b>${fn} α = ${NOT[fn][a][0]}</b>, quanto vale α?`,
+        certa,
+        erradas: [30, 45, 60, 90].map((x) => ({ html: `${x}°`, porque: x === 90 ? "90° é o ângulo reto, não um ângulo agudo." : `${fn} ${x}° = ${NOT[fn][x][0]}, que é diferente de ${NOT[fn][a][0]}.` })),
+        resol: `<p>Procure ${NOT[fn][a][0]} na linha do <b>${NOME[fn]}</b> da tabela:</p>${TABELA_MINI}<p>Ele aparece na coluna de <b>${a}°</b>.</p>`,
+      };
+    },
+  },
+
+  lado: {
+    nome: "Calcular um lado",
+    gerar() {
+      const a = U.pick([30, 45, 60]);
+      const caso = U.pick(["H→opo", "H→adj", "adj→opo", "opo→H"]);
+      const rr = { 30: 1, 45: 2, 60: 3 };        // radical que aparece em sen/cos de cada ângulo
+      let enun, lab, certa, resol, erradas = [], conhecido, un = "";
+      if (caso === "H→opo" || caso === "H→adj") {
+        const m = U.rand(2, 12), H = 2 * m;
+        const fn = caso === "H→opo" ? "sen" : "cos";
+        const r = fn === "sen" ? rr[a] : rr[90 - a];      // sen30=1/2, sen45=√2/2, sen60=√3/2; cos é o contrário
+        certa = V(m, r);
+        const outro = fn === "sen" ? "cos" : "sen", rOutro = outro === "sen" ? rr[a] : rr[90 - a];
+        lab = { hip: H, [caso === "H→opo" ? "opo" : "adj"]: "x" };
+        enun = `Calcule <b>x</b> no triângulo abaixo, em que α = ${a}°.`;
+        erradas = [
+          { html: comAprox(V(m, rOutro)), porque: `você usou o ${NOME[outro]}. Mas x é o ${caso === "H→opo" ? "cateto oposto" : "cateto adjacente"} e a hipotenusa é conhecida: isso pede o ${NOME[fn]}.` },
+          { html: comAprox(V(H, r)), porque: `faltou dividir por 2: ${fn} ${a}° = ${NOT[fn][a][0]}, então x = ${H} · ${NOT[fn][a][0]}.` },
+          { html: comAprox(V(m, r === 1 ? 3 : 1)), porque: `o valor de ${fn} ${a}° está trocado. Confira a tabela: ${fn} ${a}° = ${NOT[fn][a][0]}.` },
+          { html: comAprox(V(2 * H, r === 1 ? 1 : r)), porque: `você dividiu a hipotenusa pelo ${NOME[fn]} em vez de multiplicar.` },
+        ];
+        resol = `<ol class="passos"><li>Conheço a ${NOMELADO.hip} (${H}) e quero o ${NOMELADO[caso === "H→opo" ? "opo" : "adj"]}: isso é o <b>${NOME[fn]}</b>.</li>
+          <li><span class="mat">${fn} ${a}° = ${U.frx("x", H)}</span></li>
+          <li><span class="mat">${NOT[fn][a][0]} = ${U.frx("x", H)} ⟹ x = ${H} · ${NOT[fn][a][0]} = <b>${comAprox(certa)}</b></span></li></ol>`;
+      } else if (caso === "adj→opo") {
+        const m = U.rand(2, 9);
+        const ca = a === 30 ? 3 * m : m;
+        certa = a === 30 ? V(m, 3) : a === 45 ? V(ca, 1) : V(ca, 3);
+        lab = { adj: ca, opo: "x" };
+        enun = `Calcule <b>x</b> no triângulo abaixo, em que α = ${a}°.`;
+        erradas = [
+          { html: comAprox(a === 60 ? V(ca, 1) : V(ca, 3)), porque: "você usou o valor da tangente de outro ângulo notável." },
+          { html: comAprox(V(2 * ca, 1)), porque: "x não é a hipotenusa: oposto e adjacente se ligam pela tangente." },
+          { html: comAprox(a === 45 ? V(ca, 2) : V(ca, 1)), porque: "confira o valor da tangente na tabela de ângulos notáveis." },
+          { html: comAprox(a === 30 ? V(ca, 3) : V(m + 1, 3)), porque: `tg ${a}° = ${NOT.tg[a][0]}. Multiplique o cateto adjacente por esse valor.` },
+        ];
+        resol = `<ol class="passos"><li>Conheço o ${NOMELADO.adj} (${ca}) e quero o ${NOMELADO.opo}: isso é a <b>tangente</b>.</li>
+          <li><span class="mat">tg ${a}° = ${U.frx("x", ca)}</span></li>
+          <li><span class="mat">${NOT.tg[a][0]} = ${U.frx("x", ca)} ⟹ x = ${ca} · ${NOT.tg[a][0]} = <b>${comAprox(certa)}</b></span></li></ol>`;
+      } else {
+        // conheço o cateto oposto, quero a hipotenusa: H = opo ÷ sen a
+        const m = U.rand(2, 8);
+        const co = a === 60 ? 3 * m : m;
+        certa = a === 30 ? V(2 * co, 1) : a === 45 ? V(co, 2) : V(2 * m, 3);
+        lab = { opo: co, hip: "x" };
+        enun = `Calcule <b>x</b> no triângulo abaixo, em que α = ${a}°.`;
+        erradas = [
+          { html: comAprox(a === 30 ? V(co, 1) : V(co, 1)), porque: "a hipotenusa é sempre o maior lado; x não pode ser igual ao cateto." },
+          { html: comAprox(a === 30 ? V(co, 3) : a === 45 ? V(2 * co, 1) : V(co, 3)), porque: `você usou outra razão. Oposto e hipotenusa se ligam pelo seno: sen ${a}° = ${NOT.sen[a][0]}.` },
+          { html: comAprox(a === 30 ? V(co, 2) : a === 45 ? V(co * 2, 2) : V(3 * m, 2)), porque: "o cálculo do seno ficou errado. Monte sen = oposto ÷ hipotenusa e isole x." },
+          { html: comAprox(V(co * 3, 1)), porque: "isolar x não é multiplicar pelo cateto. Veja a resolução." },
+        ];
+        resol = `<ol class="passos"><li>Conheço o ${NOMELADO.opo} (${co}) e quero a ${NOMELADO.hip}: isso é o <b>seno</b>.</li>
+          <li><span class="mat">sen ${a}° = ${U.frx(co, "x")}</span></li>
+          <li><span class="mat">${NOT.sen[a][0]} = ${U.frx(co, "x")} ⟹ x = ${co} ÷ ${NOT.sen[a][0]} = <b>${comAprox(certa)}</b></span>${a === 60 ? `<br><small>(${co} · ${U.frx("2", "√3")} = ${U.frx(2 * co, "√3")}; multiplicando em cima e embaixo por √3: ${U.frx(2 * co + "√3", 3)} = ${certa.html})</small>` : a === 45 ? `<br><small>(${co} · ${U.frx("2", "√2")} = ${U.frx(2 * co + "√2", 2)} = ${certa.html})</small>` : ""}</li></ol>`;
+      }
+      return { enun, fig: triangulo({ co: Math.sin(a * Math.PI / 180), ca: Math.cos(a * Math.PI / 180), rot: U.pick([0, 0, 90, 180, 270]), flip: Math.random() < 0.5, lab, ang: `${a}°`, W: 400, H: 230 }),
+        certa: comAprox(certa), erradas, resol };
+    },
+  },
+
+  problemas: {
+    nome: "Problemas do dia a dia",
+    gerar() {
+      const tipo = U.pick(["aviao", "aviaoAprox", "escada", "sombra", "pipa", "rampa"]);
+      const sen = (g) => Math.sin(g * Math.PI / 180);
+      const desenho = (a, lab) => triangulo({ co: sen(a), ca: Math.cos(a * Math.PI / 180), lab, ang: `${a}°`, W: 420, H: 220, cores: false });
+      if (tipo === "aviao") {
+        const D = U.pick([1000, 1200, 1600, 2000, 2400, 3000]);
+        const certa = `${U.num(D / 2, 0)} m`;
+        return {
+          enun: `Um avião decola formando um ângulo de <b>30°</b> com a pista. Depois de percorrer <b>${D.toLocaleString("pt-BR")} m</b> em linha reta, a que altura ele está?`,
+          fig: desenho(30, { hip: `${D} m ✈`, opo: "h" , adj: "pista" }),
+          certa,
+          erradas: [
+            { html: `${U.num(D, 0)} m`, porque: "a altura é um cateto, e um cateto é sempre menor que a hipotenusa (o caminho percorrido)." },
+            { html: `${U.num(D * Math.sqrt(3) / 2, 0)} m`, porque: "você usou o cosseno. Esse valor seria a distância andada na horizontal, não a altura." },
+            { html: `${U.num(D * 2, 0)} m`, porque: "você dividiu pelo seno em vez de multiplicar." },
+            { html: `${U.num(D / 3, 0)} m`, porque: "sen 30° vale 1/2, não 1/3." },
+          ],
+          resol: `<ol class="passos"><li>O caminho percorrido (${D} m) é a ${NOMELADO.hip}; a altura h fica de frente para os 30°: ${NOMELADO.opo}.</li>
+            <li>Oposto e hipotenusa → seno: <span class="mat">sen 30° = ${U.frx("h", D)}</span></li>
+            <li><span class="mat">${U.frx(1, 2)} = ${U.frx("h", D)} ⟹ h = <b>${certa}</b></span></li></ol>`,
+        };
+      }
+      if (tipo === "aviaoAprox") {
+        const [g, s] = U.pick([[10, 0.17], [15, 0.26], [20, 0.34]]);
+        const D = U.pick([500, 1000, 1500, 2000]);
+        const h = D * s;
+        const certa = `${U.num(h, 0)} m`;
+        return {
+          enun: `Um avião decola formando <b>${g}°</b> com a pista e voa <b>${D.toLocaleString("pt-BR")} m</b> em linha reta. Use <b>sen ${g}° ≈ ${U.num(s)}</b> e <b>cos ${g}° ≈ ${U.num(Math.cos(g * Math.PI / 180))}</b>. A que altura, aproximadamente, ele está?`,
+          fig: desenho(g, { hip: `${D} m ✈`, opo: "h", adj: "pista" }),
+          certa,
+          erradas: [
+            { html: `${U.num(D * Math.cos(g * Math.PI / 180), 0)} m`, porque: "você usou o cosseno: isso dá a distância na horizontal, e não a altura." },
+            { html: `${U.num(D / s, 0)} m`, porque: "você dividiu pelo seno em vez de multiplicar (e uma altura maior que o caminho percorrido é impossível)." },
+            { html: `${U.num(D * s / 10, 0)} m`, porque: "a vírgula escorregou: confira a multiplicação." },
+            { html: `${U.num(D - h, 0)} m`, porque: "a altura não é o caminho menos alguma coisa: use o seno." },
+          ],
+          resol: `<ol class="passos"><li>O caminho (${D} m) é a ${NOMELADO.hip}; a altura é o ${NOMELADO.opo} ao ângulo de ${g}°.</li>
+            <li><span class="mat">sen ${g}° = ${U.frx("h", D)} ⟹ h = ${D} · ${U.num(s)} = <b>${certa}</b></span></li>
+            <li>O cosseno foi dado só para confundir 😉</li></ol>`,
+        };
+      }
+      if (tipo === "escada" || tipo === "pipa") {
+        const L = 2 * U.rand(2, 10), a = U.pick([30, 45, 60]);
+        const pergAltura = tipo === "pipa" || Math.random() < 0.6;
+        const fn = pergAltura ? "sen" : "cos";
+        const r = fn === "sen" ? { 30: 1, 45: 2, 60: 3 }[a] : { 30: 3, 45: 2, 60: 1 }[a];
+        const certa = V(L / 2, r);
+        const outroR = fn === "sen" ? { 30: 3, 45: 2, 60: 1 }[a] : { 30: 1, 45: 2, 60: 3 }[a];
+        const objeto = tipo === "escada" ? `Uma escada de <b>${L} m</b> está apoiada num muro e forma <b>${a}°</b> com o chão.` : `Uma pipa está presa a uma linha esticada de <b>${L} m</b>, que forma <b>${a}°</b> com o chão.`;
+        const pergunta = pergAltura ? (tipo === "escada" ? "Até que altura do muro a escada alcança?" : "A que altura do chão está a pipa? (despreze a altura da mão)") : "A que distância do muro está o pé da escada?";
+        return {
+          enun: `${objeto} ${pergunta}`,
+          fig: desenho(a, { hip: `${L} m`, opo: pergAltura ? "h" : "", adj: pergAltura ? "chão" : "d" }),
+          certa: comAprox(certa, " m"),
+          erradas: [
+            { html: comAprox(V(L / 2, outroR), " m"), porque: `você usou o ${fn === "sen" ? "cosseno" : "seno"}. ${pergAltura ? "A altura fica de frente para o ângulo: oposto → seno." : "A distância encosta no ângulo: adjacente → cosseno."}` },
+            { html: comAprox(V(L, r), " m"), porque: `faltou dividir por 2: ${fn} ${a}° = ${NOT[fn][a][0]}.` },
+            { html: comAprox(V(L, 1), " m"), porque: "esse é o comprimento da própria escada/linha (a hipotenusa)." },
+            { html: comAprox(V(L / 2, r === 2 ? 3 : 2), " m"), porque: `confira na tabela o valor de ${fn} ${a}°.` },
+            { html: comAprox(V(2 * L, 1), " m"), porque: `você dividiu pelo ${NOME[fn]} em vez de multiplicar (e um cateto nunca é maior que a hipotenusa).` },
+          ],
+          resol: `<ol class="passos"><li>A ${tipo === "escada" ? "escada" : "linha"} (${L} m) é a ${NOMELADO.hip}. ${pergAltura ? `A altura é o ${NOMELADO.opo}` : `A distância até o muro é o ${NOMELADO.adj}`} ao ângulo de ${a}°.</li>
+            <li><span class="mat">${fn} ${a}° = ${U.frx(pergAltura ? "h" : "d", L)} ⟹ ${pergAltura ? "h" : "d"} = ${L} · ${NOT[fn][a][0]} = <b>${comAprox(certa, " m")}</b></span></li></ol>`,
+        };
+      }
+      if (tipo === "sombra") {
+        const a = U.pick([30, 45, 60]);
+        const m = U.rand(2, 10), S = a === 30 ? 3 * m : 2 * m + 4;
+        const certa = a === 30 ? V(m, 3) : a === 45 ? V(S, 1) : V(S, 3);
+        return {
+          enun: `Um prédio projeta uma sombra de <b>${S} m</b> no chão quando o Sol está a <b>${a}°</b> acima do horizonte. Qual é a altura do prédio?`,
+          fig: desenho(a, { adj: `sombra ${S} m`, opo: "h", hip: "raio de sol" }),
+          certa: comAprox(certa, " m"),
+          erradas: [
+            { html: comAprox(a === 60 ? V(S, 1) : V(S, 3), " m"), porque: `confira o valor da tangente: tg ${a}° = ${NOT.tg[a][0]}.` },
+            { html: comAprox(V(S / 2, a === 30 ? 1 : a === 60 ? 3 : 2), " m"), porque: "você usou seno ou cosseno, mas a sombra e a altura são os dois catetos: isso pede a tangente." },
+            { html: comAprox(V(2 * S, 1), " m"), porque: "você tratou a sombra como se fosse a hipotenusa." },
+            { html: comAprox(a === 30 ? V(S, 1) : V(m + 1, 2), " m"), porque: "monte tg = oposto ÷ adjacente e isole h." },
+          ],
+          resol: `<ol class="passos"><li>A sombra (${S} m) encosta no ângulo: é o ${NOMELADO.adj}. A altura h é o ${NOMELADO.opo}.</li>
+            <li>Oposto e adjacente → tangente: <span class="mat">tg ${a}° = ${U.frx("h", S)}</span></li>
+            <li><span class="mat">h = ${S} · ${NOT.tg[a][0]} = <b>${comAprox(certa, " m")}</b></span></li></ol>`,
+        };
+      }
+      // rampa de acessibilidade (valores aproximados)
+      const [g, t] = U.pick([[5, 0.087], [6, 0.105], [8, 0.14]]);
+      const C = U.pick([10, 20, 30, 40, 50]);
+      const h = C * t;
+      return {
+        enun: `Uma rampa de acessibilidade tem <b>${C} m</b> de comprimento na horizontal e inclinação de <b>${g}°</b>. Use <b>tg ${g}° ≈ ${U.num(t, 3)}</b>. Quanto ela sobe, aproximadamente?`,
+        fig: desenho(g * 3, { adj: `${C} m`, opo: "h", hip: "rampa" }).replace(`${g * 3}°`, `${g}°`),
+        certa: `${U.num(h, 2)} m`,
+        erradas: [
+          { html: `${U.num(C / t, 0)} m`, porque: "você dividiu pela tangente em vez de multiplicar." },
+          { html: `${U.num(h * 10, 1)} m`, porque: "a vírgula escorregou: confira a multiplicação." },
+          { html: `${U.num(C * g / 100, 2)} m`, porque: "a inclinação em graus não é uma porcentagem: use a tangente." },
+          { html: `${U.num(h / 10, 3)} m`, porque: "a vírgula escorregou: confira a multiplicação." },
+        ],
+        resol: `<ol class="passos"><li>O comprimento na horizontal (${C} m) é o ${NOMELADO.adj}; a subida h é o ${NOMELADO.opo}.</li>
+          <li><span class="mat">tg ${g}° = ${U.frx("h", C)} ⟹ h = ${C} · ${U.num(t, 3)} = <b>${U.num(h, 2)} m</b></span></li>
+          <li>Na figura o ângulo foi exagerado para ficar visível.</li></ol>`,
+      };
+    },
+  },
+
+  pitagoras: {
+    nome: "Pitágoras",
+    gerar() {
+      const { co, ca, h } = triangulo3();
+      if (Math.random() < 0.5) {
+        return {
+          enun: `Calcule a hipotenusa <b>x</b> do triângulo retângulo cujos catetos medem <b>${co}</b> e <b>${ca}</b>.`,
+          fig: figTri(co, ca, { opo: co, adj: ca, hip: "x" }, ""),
+          certa: `${h}`,
+          erradas: [
+            { html: `${co + ca}`, porque: "não se somam os lados: somam-se os quadrados dos catetos e depois tira-se a raiz." },
+            { html: `${co * co + ca * ca}`, porque: "esse é x². Faltou tirar a raiz quadrada." },
+            { html: `${Math.abs(ca - co) || h + 1}`, porque: "a hipotenusa é o maior lado; não pode ser menor que os catetos." },
+            { html: `${h + 2}`, porque: "confira a conta: x² = cateto² + cateto²." },
+          ],
+          resol: `<ol class="passos"><li><span class="mat">x² = ${co}² + ${ca}² = ${co * co} + ${ca * ca} = ${h * h}</span></li><li><span class="mat">x = √${h * h} = <b>${h}</b></span></li></ol>`,
+        };
+      }
+      return {
+        enun: `Num triângulo retângulo, a hipotenusa mede <b>${h}</b> e um cateto mede <b>${co}</b>. Quanto mede o outro cateto <b>x</b>?`,
+        fig: figTri(co, ca, { opo: co, adj: "x", hip: h }, ""),
+        certa: `${ca}`,
+        erradas: [
+          { html: `${h - co}`, porque: "não se subtraem os lados: subtraem-se os quadrados (h² − cateto²) e depois tira-se a raiz." },
+          { html: `${h * h - co * co}`, porque: "esse é x². Faltou tirar a raiz quadrada." },
+          { html: `√${h * h + co * co}`, porque: "você somou os quadrados; para achar um cateto é preciso subtrair." },
+          { html: `${ca + 1}`, porque: "confira a conta: x² = hipotenusa² − cateto²." },
+        ],
+        resol: `<ol class="passos"><li><span class="mat">${h}² = ${co}² + x² ⟹ x² = ${h * h} − ${co * co} = ${ca * ca}</span></li><li><span class="mat">x = √${ca * ca} = <b>${ca}</b></span></li></ol>`,
+      };
+    },
+  },
+
+  relacoes: {
+    nome: "Relações (sen² + cos² = 1 e complementares)",
+    gerar() {
+      const tipo = U.pick(["cos", "cos", "tg", "comp", "comp2"]);
+      if (tipo === "cos" || tipo === "tg") {
+        const t = U.pick(TRIPLAS.slice(0, 5));
+        const [p, q, h] = Math.random() < 0.5 ? t : [t[1], t[0], t[2]];
+        if (tipo === "cos") return {
+          enun: `Sabendo que α é agudo e que <b>sen α = ${U.fr(p, h)}</b>, quanto vale <b>cos α</b>?`,
+          certa: U.fr(q, h),
+          erradas: [
+            { html: U.fr(h - p, h), porque: "sen² + cos² = 1 não quer dizer sen + cos = 1. É preciso elevar ao quadrado." },
+            { html: U.fr(p, q), porque: "isso seria a tangente (oposto ÷ adjacente)." },
+            { html: U.fr(q, p), porque: "fração invertida: o cosseno de um ângulo agudo é menor que 1." },
+            { html: U.fr(h, q), porque: "fração invertida: a hipotenusa fica embaixo." },
+          ],
+          resol: `<ol class="passos"><li><span class="mat">sen² α + cos² α = 1 ⟹ (${U.fr(p, h)})² + cos² α = 1</span></li>
+            <li><span class="mat">cos² α = 1 − ${U.fr(p * p, h * h)} = ${U.fr(q * q, h * h)}</span></li>
+            <li><span class="mat">cos α = <b>${U.fr(q, h)}</b></span> (positivo, porque α é agudo).</li>
+            <li class="nota">Atalho: desenhe o triângulo com oposto ${p} e hipotenusa ${h}; por Pitágoras o adjacente é ${q}.</li></ol>`,
+        };
+        return {
+          enun: `Se <b>sen α = ${U.fr(p, h)}</b> e <b>cos α = ${U.fr(q, h)}</b>, quanto vale <b>tg α</b>?`,
+          certa: U.fr(p, q),
+          erradas: [
+            { html: U.fr(q, p), porque: "é seno ÷ cosseno, e não cosseno ÷ seno." },
+            { html: U.fr(p * q, h * h), porque: "a tangente é uma divisão, não uma multiplicação." },
+            { html: U.fr(p + q, h), porque: "a tangente não é a soma do seno com o cosseno." },
+            { html: U.fr(h, p), porque: "a hipotenusa não aparece na tangente." },
+          ],
+          resol: `<p><span class="mat">tg α = ${U.frx("sen α", "cos α")} = ${U.fr(p, h)} ÷ ${U.fr(q, h)} = ${U.fr(p, h)} · ${U.fr(h, q)} = <b>${U.fr(p, q)}</b></span></p><p>Os ${h} se cancelam: sobra oposto ÷ adjacente.</p>`,
+        };
+      }
+      if (tipo === "comp") {
+        let b = U.rand(10, 80); if (b === 45) b = 40;
+        return {
+          enun: `Sabendo que <b>sen α = cos ${b}°</b> e que α é agudo, quanto vale α?`,
+          certa: `${90 - b}°`,
+          erradas: [
+            { html: `${b}°`, porque: `sen ${b}° só é igual a cos ${b}° quando o ângulo é 45°.` },
+            { html: `${180 - b}°`, porque: "complementares somam 90°, não 180° (esses seriam suplementares)." },
+            { html: `${90 + b}°`, porque: "α é agudo (menor que 90°)." },
+            { html: `${90 - b + 10}°`, porque: "use: sen α = cos (90° − α), ou seja, α + " + b + "° = 90°." },
+          ],
+          resol: `<p>Num triângulo retângulo, o oposto de um ângulo agudo é o adjacente do outro. Por isso <span class="mat">sen α = cos (90° − α)</span>.</p><p><span class="mat">90° − α = ${b}° ⟹ α = <b>${90 - b}°</b></span></p>`,
+        };
+      }
+      const a = U.rand(15, 75);
+      return {
+        enun: `Os dois ângulos agudos de um triângulo retângulo são α e β. Se α = ${a}°, qual destas igualdades é verdadeira?`,
+        certa: `sen ${a}° = cos ${90 - a}°`,
+        erradas: [
+          { html: `sen ${a}° = sen ${90 - a}°`, porque: "sen α = sen β só acontece se α = β = 45°." },
+          { html: `cos ${a}° = cos ${90 - a}°`, porque: "cos α = cos β só acontece se α = β = 45°." },
+          { html: `sen ${a}° = cos ${a}°`, porque: "isso só vale para 45°." },
+          { html: `tg ${a}° = tg ${90 - a}°`, porque: `na verdade tg ${90 - a}° = 1 ÷ tg ${a}°.` },
+        ],
+        resol: `<p>β = 90° − ${a}° = ${90 - a}°. O cateto oposto a α é o adjacente a β, então <b>sen ${a}° = cos ${90 - a}°</b>.</p>`,
+      };
+    },
+  },
+};
+
+/* ================= LIGAR TUDO ================= */
+iniciarAbas();
+desenharTeoria();
+desenharCiclo();
+document.getElementById("j-rec").textContent = Jogo.recorde();
+criarQuiz({ raiz: document.getElementById("quiz"), modulo: "Trigonometria", geradores: GERADORES });
+iniciarRelatorio(document.getElementById("rel"));
+</script>
+</body>
+</html>

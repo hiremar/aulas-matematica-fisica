@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aulas de Matemática e Física</title>
+<meta name="description" content="Materiais interativos de estudo: teoria, jogos e exercícios infinitos com justificativa.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Kalam:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/*CSS*/
+.capa { border-bottom: 2px solid var(--margem); background-color: var(--quadro);
+  background-image: linear-gradient(var(--grade) 1px, transparent 1px), linear-gradient(90deg, var(--grade) 1px, transparent 1px);
+  background-size: 20px 20px; }
+.capa-in { max-width: 880px; margin: 0 auto; padding: 40px 16px 28px; }
+.capa h1 { font-size: 2.3rem; line-height: 1.1; margin: 0 0 8px; letter-spacing: -0.015em; }
+.capa p { margin: 0; color: var(--tinta-2); }
+.capa .nota { margin-top: 14px; }
+.materia { margin: 34px 0; }
+.materia h2 { margin-bottom: 4px; }
+.fichas { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 14px; margin-top: 14px; }
+.ficha { display: grid; grid-template-rows: auto 1fr; gap: 0; background: #fff; border: 1px solid var(--grade);
+  border-radius: var(--raio); text-decoration: none; color: var(--tinta); overflow: hidden; }
+.ficha:hover { border-color: var(--tinta-2); }
+.ficha .desenho { border-bottom: 1px solid var(--grade); background-color: var(--quadro);
+  background-image: linear-gradient(var(--grade) 1px, transparent 1px), linear-gradient(90deg, var(--grade) 1px, transparent 1px);
+  background-size: 14px 14px; padding: 8px; }
+.ficha .desenho svg { display: block; width: 100%; height: 130px; }
+.ficha .txt { padding: 12px 14px 14px; }
+.ficha b { font-size: 1.12rem; display: block; }
+.ficha span { color: var(--tinta-2); font-size: 0.95rem; }
+.ficha.breve { opacity: 0.6; pointer-events: none; }
+</style>
+</head>
+<body>
+<header class="capa">
+  <div class="capa-in">
+    <h1>Aulas de Matemática e Física</h1>
+    <p>Teoria com figuras que mexem, um jogo para fixar e exercícios que nunca acabam, sempre com a justificativa.</p>
+    <p class="nota">Funciona no celular, sem instalar nada. Seu desempenho fica salvo no próprio aparelho, na aba "Meu relatório".</p>
+  </div>
+</header>
+<main>
+  <section class="materia">
+    <h2>Matemática · 1º ano do Ensino Médio</h2>
+    <div class="fichas">
+      <a class="ficha" href="trigonometria.html">
+        <div class="desenho" id="d-trig"></div>
+        <div class="txt"><b>Trigonometria no triângulo retângulo</b><span>Seno, cosseno, tangente, ângulos notáveis e problemas do dia a dia.</span></div>
+      </a>
+      <a class="ficha" href="funcao-quadratica.html">
+        <div class="desenho" id="d-quad"></div>
+        <div class="txt"><b>Função quadrática</b><span>Parábola, Bhaskara, vértice, máximo e mínimo, soma e produto.</span></div>
+      </a>
+    </div>
+  </section>
+  <section class="materia">
+    <h2>Física</h2>
+    <div class="fichas">
+      <div class="ficha breve" aria-disabled="true">
+        <div class="desenho" id="d-fis"></div>
+        <div class="txt"><b>Em breve</b><span>Novos materiais vão aparecer aqui.</span></div>
+      </div>
+    </div>
+  </section>
+  <section class="materia">
+    <h2>Como usar</h2>
+    <ol class="passos">
+      <li>Leia a <b>Teoria</b> e mexa nas figuras.</li>
+      <li>Treine no <b>Jogo</b>.</li>
+      <li>Faça quantos <b>Exercícios</b> quiser: depois de cada resposta aparece a justificativa.</li>
+      <li>No <b>Meu relatório</b>, escreva seu nome e salve em PDF ou copie o resumo para enviar ao professor.</li>
+    </ol>
+  </section>
+</main>
+<footer class="rodape">Material de apoio para estudo · elaborado por Hiremar Soares.</footer>
+<script>
+/*JS*/
+</script>
+<script>
+document.getElementById("d-trig").innerHTML = triangulo({ co: 3, ca: 4, cores: true, W: 300, H: 130, pad: 16, lab: {} }).replace("<svg ", '<svg preserveAspectRatio="xMidYMid meet" ');
+document.getElementById("d-quad").innerHTML = grafico({ a: 0.6, b: -1.2, c: -3, pontos: true, W: 300, H: 130, x0: -5, x1: 5, y0: -4.5, y1: 4, numeros: false });
+document.getElementById("d-fis").innerHTML = `<svg viewBox="0 0 300 130"><path d="M10,65 C45,10 80,10 115,65 S185,120 220,65 S290,10 300,40" fill="none" stroke="${COR.tinta2}" stroke-width="3" stroke-dasharray="6 6"/></svg>`;
+</script>
+</body>
+</html>

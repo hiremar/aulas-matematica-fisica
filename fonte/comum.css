@@ -1,0 +1,220 @@
+/* =========================================================
+   Visual "caderno quadriculado" — comum a todas as páginas
+   ========================================================= */
+:root {
+  color-scheme: light;
+  --papel: #fbfdff;          /* fundo da página */
+  --quadro: #f4f8fc;         /* fundo das figuras */
+  --grade: #d6e4f2;          /* linhas do quadriculado */
+  --tinta: #1d3557;          /* "caneta azul": texto principal */
+  --tinta-2: #4a6283;        /* texto secundário */
+  --margem: #e05561;         /* linha vermelha da margem do caderno */
+  /* marca-textos: cada cor tem UM significado fixo */
+  --mt-rosa: #ff8cc6;        /* cateto oposto / raízes */
+  --mt-verde: #6fdc8c;       /* cateto adjacente / vértice */
+  --mt-amarelo: #ffe14d;     /* hipotenusa / onde corta o eixo y */
+  --mt-azul: #8cc8ff;
+  --certo: #157347;
+  --certo-bg: #e3f6ea;
+  --errado: #b42335;
+  --errado-bg: #fde8eb;
+  --raio: 10px;
+  --fonte: "Atkinson Hyperlegible", "Segoe UI", Roboto, Arial, sans-serif;
+  --mao: "Kalam", "Comic Sans MS", "Segoe Print", cursive;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--papel);
+  color: var(--tinta);
+  font-family: var(--fonte);
+  font-size: 17px;
+  line-height: 1.6;
+}
+a { color: var(--tinta); }
+button, input, select { font: inherit; color: inherit; }
+:focus-visible { outline: 3px solid var(--mt-azul); outline-offset: 2px; }
+
+/* ---------- topo ---------- */
+.topo {
+  border-bottom: 2px solid var(--margem);
+  background: #fff;
+}
+.topo-in {
+  max-width: 880px; margin: 0 auto; padding: 18px 16px 12px;
+  display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+}
+.topo h1 { margin: 0; font-size: 1.75rem; line-height: 1.15; letter-spacing: -0.01em; }
+.topo .sub { margin: 2px 0 0; color: var(--tinta-2); font-size: 0.95rem; }
+.voltar { font-size: 0.9rem; color: var(--tinta-2); text-decoration: none; white-space: nowrap; }
+.voltar:hover { text-decoration: underline; }
+
+/* ---------- abas (parecem as abas de um fichário) ---------- */
+.abas {
+  position: sticky; top: 0; z-index: 20;
+  background: rgba(251, 253, 255, 0.96);
+  backdrop-filter: blur(4px);
+  border-bottom: 1px solid var(--grade);
+}
+.abas-in {
+  max-width: 880px; margin: 0 auto; padding: 8px 16px 0;
+  display: flex; gap: 4px; overflow-x: auto; scrollbar-width: none;
+}
+.abas-in::-webkit-scrollbar { display: none; }
+.aba {
+  flex: 0 0 auto;
+  border: 1px solid var(--grade); border-bottom: none;
+  background: #eef4fa; color: var(--tinta-2);
+  padding: 8px 14px; border-radius: 9px 9px 0 0;
+  cursor: pointer; font-weight: 700; font-size: 0.95rem;
+}
+.aba[aria-selected="true"] { background: #fff; color: var(--tinta); box-shadow: inset 0 3px 0 var(--tinta); }
+
+/* ---------- conteúdo ---------- */
+main { max-width: 880px; margin: 0 auto; padding: 8px 16px 64px; }
+.painel[hidden] { display: none; }
+.painel > section { margin: 28px 0 40px; }
+h2 { font-size: 1.45rem; line-height: 1.25; margin: 0 0 10px; }
+h3 { font-size: 1.12rem; margin: 22px 0 6px; }
+p, li { max-width: 68ch; }
+.nota {                          /* anotação "do professor", escrita à mão */
+  font-family: var(--mao); font-size: 1.15rem; color: #2b59a8; line-height: 1.35;
+}
+.destaque {                      /* caixa de regra importante */
+  border-left: 5px solid var(--tinta); background: #fff;
+  padding: 12px 16px; margin: 14px 0; border-radius: 0 var(--raio) var(--raio) 0;
+  box-shadow: 0 1px 0 var(--grade);
+}
+.exemplo {                       /* exemplo resolvido */
+  background: #fff; border: 1px solid var(--grade); border-radius: var(--raio);
+  padding: 14px 16px; margin: 16px 0;
+}
+.exemplo > b:first-child { display: block; margin-bottom: 4px; }
+.passos { margin: 8px 0 0; padding-left: 1.3em; }
+.passos li { margin: 4px 0; }
+
+/* marca-texto em linha */
+.mt { padding: 0 3px; border-radius: 3px; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+.mt.rosa { background: var(--mt-rosa); }
+.mt.verde { background: var(--mt-verde); }
+.mt.amarelo { background: var(--mt-amarelo); }
+.mt.azul { background: var(--mt-azul); }
+
+/* fração montada em HTML */
+.fr { display: inline-flex; flex-direction: column; vertical-align: middle; text-align: center; line-height: 1.15; margin: 0 2px; }
+.fr > span:first-child { border-bottom: 1.6px solid currentColor; padding: 0 3px 1px; }
+.fr > span:last-child { padding: 1px 3px 0; }
+.mat { white-space: nowrap; font-variant-numeric: lining-nums; }
+.formula { font-size: 1.2rem; text-align: center; margin: 12px 0; }
+
+/* figura sobre papel quadriculado */
+.figura {
+  background-color: var(--quadro);
+  background-image:
+    linear-gradient(var(--grade) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grade) 1px, transparent 1px);
+  background-size: 20px 20px;
+  border: 1px solid var(--grade); border-radius: var(--raio);
+  padding: 10px; margin: 14px 0;
+}
+.figura svg { display: block; width: 100%; height: auto; }
+.legenda { font-size: 0.92rem; color: var(--tinta-2); margin-top: 6px; }
+
+/* controles deslizantes */
+.controles { display: grid; gap: 10px; margin: 10px 0; }
+.controle { display: grid; grid-template-columns: 7.5em 1fr 4.2em; align-items: center; gap: 10px; }
+.controle label { font-weight: 700; }
+.controle output { font-variant-numeric: tabular-nums; text-align: right; font-weight: 700; }
+input[type="range"] { width: 100%; accent-color: var(--tinta); height: 28px; }
+
+/* leitura ao vivo (valores) */
+.leitura { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 8px; margin: 10px 0; }
+.leitura div { background: #fff; border: 1px solid var(--grade); border-radius: 8px; padding: 8px 10px; }
+.leitura small { display: block; color: var(--tinta-2); font-size: 0.82rem; }
+.leitura b { font-variant-numeric: tabular-nums; }
+
+table.tab { border-collapse: collapse; margin: 12px 0; background: #fff; font-variant-numeric: lining-nums; }
+table.tab th, table.tab td { border: 1px solid var(--grade); padding: 8px 14px; text-align: center; }
+table.tab th { background: #eef4fa; }
+.rolar { overflow-x: auto; }
+
+/* botões */
+.btn {
+  border: none; border-radius: 999px; padding: 11px 20px; cursor: pointer;
+  background: var(--tinta); color: #fff; font-weight: 700;
+}
+.btn:hover { background: #2c4f7c; }
+.btn.claro { background: #fff; color: var(--tinta); border: 2px solid var(--tinta); }
+.btn.claro:hover { background: #eef4fa; }
+.btn:disabled { opacity: 0.45; cursor: default; }
+.linha-btn { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin: 12px 0; }
+
+/* ---------- placar ---------- */
+.placar { display: flex; gap: 16px; flex-wrap: wrap; font-weight: 700; margin: 6px 0 12px; }
+.placar span { background: #fff; border: 1px solid var(--grade); border-radius: 999px; padding: 4px 12px; font-variant-numeric: tabular-nums; }
+
+/* ---------- questão de múltipla escolha ---------- */
+.questao { background: #fff; border: 1px solid var(--grade); border-radius: var(--raio); padding: 16px; }
+.questao .tema { font-size: 0.85rem; color: var(--tinta-2); margin: 0 0 6px; }
+.questao .enun { font-size: 1.08rem; margin: 0 0 10px; }
+.opcoes { display: grid; gap: 8px; margin-top: 12px; }
+.opcao {
+  text-align: left; background: #fff; border: 2px solid var(--grade); border-radius: 9px;
+  padding: 10px 12px; cursor: pointer; display: flex; gap: 10px; align-items: center; min-height: 48px;
+}
+.opcao:hover:not(:disabled) { border-color: var(--tinta-2); }
+.opcao .letra { flex: 0 0 auto; width: 1.8em; height: 1.8em; border-radius: 50%; background: #eef4fa; display: grid; place-items: center; font-weight: 700; font-size: 0.9rem; }
+.opcao:disabled { cursor: default; }
+.opcao.certa { border-color: var(--certo); background: var(--certo-bg); }
+.opcao.errada { border-color: var(--errado); background: var(--errado-bg); }
+.resolucao { margin-top: 14px; border-top: 2px dashed var(--grade); padding-top: 12px; }
+.resolucao .veredito { font-weight: 700; margin: 0 0 6px; }
+.resolucao .veredito.ok { color: var(--certo); }
+.resolucao .veredito.nok { color: var(--errado); }
+.resolucao .porque { background: var(--errado-bg); border-radius: 8px; padding: 8px 12px; margin: 8px 0; }
+
+.filtros { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0 14px; }
+.filtros label { background: #fff; border: 1px solid var(--grade); border-radius: 999px; padding: 4px 12px; cursor: pointer; font-size: 0.92rem; }
+.filtros input { accent-color: var(--tinta); }
+
+/* ---------- jogo ---------- */
+.jogo-topo { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+.cronometro { font-variant-numeric: tabular-nums; font-weight: 700; font-size: 1.3rem; }
+.pedido { font-size: 1.2rem; font-weight: 700; text-align: center; margin: 8px 0; min-height: 1.6em; }
+.flash-ok { animation: flashok 0.35s; }
+.flash-erro { animation: flasherro 0.35s; }
+@keyframes flashok { 50% { background-color: var(--certo-bg); } }
+@keyframes flasherro { 50% { background-color: var(--errado-bg); } }
+
+/* ---------- relatório ---------- */
+.rel-item { border-bottom: 1px solid var(--grade); padding: 10px 0; }
+.rel-item .st { font-weight: 700; }
+.rel-item .st.ok { color: var(--certo); }
+.rel-item .st.nok { color: var(--errado); }
+.rel-item details { margin-top: 4px; }
+.rel-item summary { cursor: pointer; color: var(--tinta-2); }
+.nome-aluno { padding: 9px 12px; border: 2px solid var(--grade); border-radius: 8px; min-width: 240px; }
+
+.rodape { max-width: 880px; margin: 0 auto; padding: 16px; color: var(--tinta-2); font-size: 0.85rem; border-top: 1px solid var(--grade); }
+
+@media (max-width: 560px) {
+  body { font-size: 16px; }
+  .topo h1 { font-size: 1.45rem; }
+  .controle { grid-template-columns: 5.5em 1fr 3.6em; gap: 6px; }
+  .questao { padding: 12px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+
+/* ---------- impressão: só o relatório ---------- */
+@media print {
+  body { background: #fff; font-size: 12pt; }
+  .abas, .topo .voltar, .rodape, .nao-imprimir, .btn { display: none !important; }
+  .painel { display: none !important; }
+  .painel.imprimir { display: block !important; }
+  .rel-item details > *:not(summary) { display: block !important; }
+  .rel-item summary { display: none; }
+  .rel-item { break-inside: avoid; }
+}
