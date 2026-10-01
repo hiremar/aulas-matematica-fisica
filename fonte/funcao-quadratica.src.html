@@ -185,7 +185,7 @@
       <li>f(x) = 0 quando <b>x = −1 ou x = 3</b>;</li>
       <li>f(x) &lt; 0 (abaixo do eixo) quando <b>−1 &lt; x &lt; 3</b>.</li>
     </ul>
-    <p class="nota">Regra de bolso (com a &gt; 0): "fora das raízes, o sinal de a; entre as raízes, o sinal contrário".</p>
+    <p class="nota">Regra de bolso: "fora das raízes, o sinal de a; entre as raízes, o sinal contrário".</p>
   </section>
   <section>
     <h2>💡 Forma fatorada e forma canônica</h2>
@@ -357,7 +357,7 @@ function resolBhaskara(a, b, c) {
     <li>Δ = b² − 4ac = ${par(b)}² − 4·${par(a)}·${par(c)} = ${U.num(b * b)} ${sgn(-4 * a * c)} = <b>${U.num(D)}</b></li>`;
   if (D < 0) return s + `<li>Δ &lt; 0: não existe raiz real (não há raiz quadrada real de número negativo).</li>`;
   const rq = Math.sqrt(D);
-  s += `<li>x = <span class="mat">${U.frx(`−${par(b)} ± √${U.num(D)}`, `2·${par(a)}`)} = ${U.frx(`${U.num(-b)} ± ${U.num(rq)}`, U.num(2 * a))}</span></li>`;
+  s += `<li>x = <span class="mat">${U.frx(`${b === 0 ? "" : "−" + par(b) + " "}± √${U.num(D)}`, `2·${par(a)}`)} = ${U.frx(`${b === 0 ? "" : U.num(-b) + " "}± ${U.num(rq)}`, U.num(2 * a))}</span></li>`;
   if (D === 0) return s + `<li>Δ = 0: raiz dupla x = <b>${U.fr(-b, 2 * a)}</b></li>`;
   return s + `<li>x₁ = ${U.frx(U.num(-b + rq), U.num(2 * a))} = <b>${U.fr(-b + rq, 2 * a)}</b> &nbsp;e&nbsp; x₂ = ${U.frx(U.num(-b - rq), U.num(2 * a))} = <b>${U.fr(-b - rq, 2 * a)}</b></li>`;
 }
@@ -419,7 +419,7 @@ const GERADORES = {
           enun: `Calcule o discriminante <b>Δ</b> de <b>${U.poli(a, b, c)}</b>.`,
           certa: `Δ = ${U.num(D)}`,
           erradas: [
-            { html: `Δ = ${U.num(-b * b - 4 * a * c)}`, porque: `b² é sempre positivo: ${par(b)}² = ${U.num(b * b)}, e não ${U.num(-b * b)}.` },
+            { html: `Δ = ${U.num(-b * b - 4 * a * c)}`, porque: `b² nunca é negativo: ${par(b)}² = ${U.num(b * b)}, e não ${U.num(-b * b)}.` },
             { html: `Δ = ${U.num(b * b + 4 * a * c)}`, porque: "o sinal do 4ac ficou trocado. Cuidado com o jogo de sinais em −4·a·c." },
             { html: `Δ = ${U.num(b - 4 * a * c)}`, porque: "faltou elevar o b ao quadrado." },
             { html: `Δ = ${U.num(b * b - 2 * a * c)}`, porque: "é 4ac, e não 2ac." },
@@ -458,7 +458,7 @@ const GERADORES = {
         erradas: [
           { html: conjunto(-r1, -r2), porque: "os sinais ficaram trocados. Lembre: x = (−b ± √Δ) ÷ 2a — o −b muda o sinal de b." },
           { html: conjunto(r1, -r2), porque: "uma das raízes ficou com o sinal trocado. Teste: substitua na função e veja se dá zero." },
-          { html: conjunto(2 * r1, 2 * r2), porque: "faltou dividir por 2a." },
+          { html: conjunto(2 * a * r1, 2 * a * r2), porque: "faltou dividir por 2a." },
           { html: conjunto(r1 + 1, r2 + 1), porque: "confira o Δ e a raiz quadrada." },
           { html: conjunto(r1 - 2, r2 + 2), porque: "teste substituindo na função: esses valores não dão zero." },
           { html: "Não tem raiz real", porque: `aqui Δ = ${U.num(b * b - 4 * a * c)} ≥ 0, então existem raízes reais.` },
@@ -494,7 +494,7 @@ const GERADORES = {
     nome: "Máximo ou mínimo",
     gerar() {
       const a = U.pick([1, -1, 2, -2, 3, -3]), xv = U.rand(-4, 4);
-      let yv = naoZero(-8, 8); if (yv === xv) yv++;
+      let yv = naoZero(-8, 8); if (yv === xv) yv = yv === -1 ? -2 : yv + 1;
       const b = -2 * a * xv, c = a * xv * xv + yv;
       const tipo = a > 0 ? "mínimo" : "máximo", outro = a > 0 ? "máximo" : "mínimo";
       return {
@@ -543,7 +543,7 @@ const GERADORES = {
     nome: "Soma e produto",
     gerar() {
       let a, b, c;
-      do { a = U.pick([1, 1, 2, -1, 3]); b = naoZero(-9, 9); c = naoZero(-9, 9); } while (Math.abs(b) === Math.abs(c));
+      do { a = U.pick([1, 1, 2, -1, 3]); b = naoZero(-9, 9); c = naoZero(-9, 9); } while (Math.abs(b) === Math.abs(c) || b * b - 4 * a * c < 0);
       const S = U.fr(-b, a), P = U.fr(c, a);
       const t = (s, p) => `soma = ${s} e produto = ${p}`;
       return {
@@ -572,7 +572,7 @@ const GERADORES = {
         enun: `Se <b>${U.poli(a, b, c)}</b>, quanto vale <b>f(${U.num(k)})</b>?`,
         certa: `${U.num(v)}`,
         erradas: [
-          { html: U.num(-a * k * k + b * k + c), porque: `${par(k)}² = ${U.num(k * k)} é positivo. Calcule a potência antes de multiplicar pelo a.` },
+          ...(k < 0 ? [{ html: U.num(-a * k * k + b * k + c), porque: `${par(k)}² = ${U.num(k * k)} é positivo. Use parênteses: (−${-k})² e não −${-k}².` }] : []),
           { html: U.num(a * 2 * k + b * k + c), porque: `x² não é 2x: ${par(k)}² = ${par(k)}·${par(k)} = ${U.num(k * k)}.` },
           { html: U.num(a * k * k - b * k + c), porque: "o sinal do termo bx ficou trocado. Use parênteses ao substituir números negativos." },
           { html: U.num(a * k * k + b * k - c), porque: "o sinal do c ficou trocado." },
@@ -602,7 +602,7 @@ const GERADORES = {
           enun: enunBase + " Qual é a altura máxima atingida?", certa: `${U.num(hmax)} m`,
           erradas: [
             { html: `${U.num(tv)} m`, porque: `${U.num(tv)} é o instante (em segundos) em que a bola chega ao topo, não a altura.` },
-            { html: `${U.num(2 * hmax)} m`, porque: "confira: y_v = −Δ ÷ 4a. Parece que você dividiu por 2a." },
+            { html: `${U.num(2 * hmax)} m`, porque: "confira: y<sub>v</sub> = −Δ ÷ 4a. Parece que você dividiu por 2a." },
             { html: `${U.num(v)} m`, porque: `${v} é a velocidade inicial (o coeficiente b), não a altura.` },
             { html: `${U.num(hmax / 2)} m`, porque: "confira a conta de h(t) no instante do topo." },
           ], resol: resolBase,
@@ -612,8 +612,8 @@ const GERADORES = {
           erradas: [
             { html: `${U.num(tchao)} s`, porque: "esse é o instante em que a bola volta ao chão. O topo fica no meio do caminho." },
             { html: `${U.num(hmax)} s`, porque: "esse valor é a altura máxima (em metros), não o tempo." },
-            { html: `${U.num(v / 5 + 1)} s`, porque: "use t_v = −b ÷ 2a." },
-            { html: `${U.num(v)} s`, porque: "use t_v = −b ÷ 2a." },
+            { html: `${U.num(v / 5 + 1)} s`, porque: "use t<sub>v</sub> = −b ÷ 2a." },
+            { html: `${U.num(v)} s`, porque: "use t<sub>v</sub> = −b ÷ 2a." },
           ], resol: resolBase,
         };
         return {
@@ -643,21 +643,21 @@ const GERADORES = {
             <li>Área máxima: ${U.num(L)} · ${U.num(L)} = <b>${U.num(A)} m²</b></li></ol>`,
         };
       }
-      const k = 2 * U.rand(10, 30), c0 = U.pick([50, 80, 100, 120]), xv = k / 2, Lmax = xv * xv - c0;
+      const k = 2 * U.rand(10, 30), c0 = U.pick([50, 80, 100, 120].filter((v) => (k / 2) ** 2 - v >= 20)), xv = k / 2, Lmax = xv * xv - c0;
       const qual = Math.random() < 0.5;
       return {
         enun: `O lucro de uma lanchonete, em reais, ao vender x lanches por dia é <b>L(x) = −x² + ${k}x − ${c0}</b>. ${qual ? "Quantos lanches ela deve vender para ter o lucro máximo?" : "Qual é o lucro máximo?"}`,
         certa: qual ? `${xv} lanches` : `R$ ${U.num(Lmax)}`,
         erradas: qual ? [
-          { html: `${k} lanches`, porque: `com ${k} lanches o lucro volta a ser −${c0} (igual a vender nenhum). O máximo fica no meio: x_v = −b ÷ 2a.` },
-          { html: `${xv * xv} lanches`, porque: "isso é x_v ao quadrado. A quantidade é o próprio x_v." },
+          { html: `${k} lanches`, porque: `com ${k} lanches o lucro volta a ser −${c0} (igual a vender nenhum). O máximo fica no meio: x<sub>v</sub> = −b ÷ 2a.` },
+          { html: `${xv * xv} lanches`, porque: "isso é x<sub>v</sub> ao quadrado. A quantidade é o próprio x<sub>v</sub>." },
           { html: `${c0} lanches`, porque: `${c0} é o custo fixo (o c), não a quantidade.` },
-          { html: `${xv + 5} lanches`, porque: "use x_v = −b ÷ 2a." },
+          { html: `${xv + 5} lanches`, porque: "use x<sub>v</sub> = −b ÷ 2a." },
         ] : [
           { html: `R$ ${U.num(xv * xv)}`, porque: `esqueceu de descontar o custo fixo de R$ ${c0}.` },
-          { html: `R$ ${U.num(xv)}`, porque: `${xv} é a quantidade de lanches (x_v), não o lucro (y_v).` },
-          { html: `R$ ${U.num(k * k - c0)}`, porque: "o valor de x² é x_v², não k²." },
-          { html: `R$ ${U.num(Lmax + c0 * 2)}`, porque: "o custo fixo se subtrai: L(x_v) = −x_v² + " + k + "x_v − " + c0 + "." },
+          { html: `R$ ${U.num(xv)}`, porque: `${xv} é a quantidade de lanches (x<sub>v</sub>), não o lucro (y<sub>v</sub>).` },
+          { html: `R$ ${U.num(k * k - c0)}`, porque: "o valor de x² é x<sub>v</sub>², não k²." },
+          { html: `R$ ${U.num(Lmax + c0 * 2)}`, porque: "o custo fixo se subtrai: L(x<sub>v</sub>) = −x<sub>v</sub>² + " + k + "x<sub>v</sub> − " + c0 + "." },
         ],
         resol: `<ol class="passos"><li>a = −1 &lt; 0: a parábola tem ponto de máximo.</li>
           <li>x<sub>v</sub> = ${U.frx(`−${k}`, "2·(−1)")} = ${xv} lanches</li>

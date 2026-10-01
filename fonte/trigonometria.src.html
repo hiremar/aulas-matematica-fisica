@@ -378,7 +378,7 @@ const GERADORES = {
         const chave = a + "," + b;
         const porque = qual[chave]
           ? `você dividiu ${NOMELADO[a]} por ${NOMELADO[b]}: essa divisão é ${qual[chave]} de α, não ${fn === "tg" ? "a" : "o"} ${NOME[fn]}.`
-          : `a fração ficou de cabeça para baixo. ${a === "hip" ? "A hipotenusa nunca vai em cima: seno e cosseno são sempre menores que 1." : "Na tangente, o oposto vai em cima e o adjacente embaixo."}`;
+          : `você dividiu ${NOMELADO[a]} por ${NOMELADO[b]}: isso é ${{ "adj,opo": "a tangente", "hip,opo": "o seno", "hip,adj": "o cosseno" }[chave]} de cabeça para baixo, não ${fn === "tg" ? "a" : "o"} ${NOME[fn]} de α.${a === "hip" ? " A hipotenusa nunca vai em cima." : ""}`;
         return { html: U.fr(val[a], val[b], false), porque };
       });
       const simp = U.fr(val[cima], val[baixo]);
@@ -442,7 +442,9 @@ const GERADORES = {
           { html: comAprox(V(m, rOutro)), porque: `você usou o ${NOME[outro]}. Mas x é o ${caso === "H→opo" ? "cateto oposto" : "cateto adjacente"} e a hipotenusa é conhecida: isso pede o ${NOME[fn]}.` },
           { html: comAprox(V(H, r)), porque: `faltou dividir por 2: ${fn} ${a}° = ${NOT[fn][a][0]}, então x = ${H} · ${NOT[fn][a][0]}.` },
           { html: comAprox(V(m, r === 1 ? 3 : 1)), porque: `o valor de ${fn} ${a}° está trocado. Confira a tabela: ${fn} ${a}° = ${NOT[fn][a][0]}.` },
-          { html: comAprox(V(2 * H, r === 1 ? 1 : r)), porque: `você dividiu a hipotenusa pelo ${NOME[fn]} em vez de multiplicar.` },
+          { html: comAprox(V(H, 1)), porque: "x é um cateto, e um cateto é sempre menor que a hipotenusa." },
+          ...(r === 2 ? [{ html: comAprox(V(m, 3)), porque: `${fn} 45° = ${NOT[fn][45][0]}, e não ${U.frx("√3", "2")}.` }] : []),
+          { html: comAprox(r === 1 ? V(2 * H, 1) : r === 2 ? V(H, 2) : V(2 * H, 3)), porque: r === 3 ? `você usou ${H}·√3 · 2 — confira: x = ${H} · ${NOT[fn][a][0]}, e não ${H} · 2√3.` : `você dividiu a hipotenusa pelo ${NOME[fn]} em vez de multiplicar.` },
         ];
         resol = `<ol class="passos"><li>Conheço a ${NOMELADO.hip} (${H}) e quero o ${NOMELADO[caso === "H→opo" ? "opo" : "adj"]}: isso é o <b>${NOME[fn]}</b>.</li>
           <li><span class="mat">${fn} ${a}° = ${U.frx("x", H)}</span></li>
@@ -455,7 +457,7 @@ const GERADORES = {
         enun = `Calcule <b>x</b> no triângulo abaixo, em que α = ${a}°.`;
         erradas = [
           { html: comAprox(a === 60 ? V(ca, 1) : V(ca, 3)), porque: "você usou o valor da tangente de outro ângulo notável." },
-          { html: comAprox(V(2 * ca, 1)), porque: "x não é a hipotenusa: oposto e adjacente se ligam pela tangente." },
+          { html: comAprox(V(2 * ca, 1)), porque: `confira o valor da tangente: tg ${a}° = ${NOT.tg[a][0]}.` },
           { html: comAprox(a === 45 ? V(ca, 2) : V(ca, 1)), porque: "confira o valor da tangente na tabela de ângulos notáveis." },
           { html: comAprox(a === 30 ? V(ca, 3) : V(m + 1, 3)), porque: `tg ${a}° = ${NOT.tg[a][0]}. Multiplique o cateto adjacente por esse valor.` },
         ];
@@ -494,7 +496,7 @@ const GERADORES = {
         const D = U.pick([1000, 1200, 1600, 2000, 2400, 3000]);
         const certa = `${U.num(D / 2, 0)} m`;
         return {
-          enun: `Um avião decola formando um ângulo de <b>30°</b> com a pista. Depois de percorrer <b>${D.toLocaleString("pt-BR")} m</b> em linha reta, a que altura ele está?`,
+          enun: `Um avião decola formando um ângulo de <b>30°</b> com a pista. Depois de percorrer <b>${U.num(D, 0)} m</b> em linha reta, a que altura ele está?`,
           fig: desenho(30, { hip: `${D} m ✈`, opo: "h" , adj: "pista" }),
           certa,
           erradas: [
@@ -514,11 +516,11 @@ const GERADORES = {
         const h = D * s;
         const certa = `${U.num(h, 0)} m`;
         return {
-          enun: `Um avião decola formando <b>${g}°</b> com a pista e voa <b>${D.toLocaleString("pt-BR")} m</b> em linha reta. Use <b>sen ${g}° ≈ ${U.num(s)}</b> e <b>cos ${g}° ≈ ${U.num(Math.cos(g * Math.PI / 180))}</b>. A que altura, aproximadamente, ele está?`,
+          enun: `Um avião decola formando <b>${g}°</b> com a pista e voa <b>${U.num(D, 0)} m</b> em linha reta. Use <b>sen ${g}° ≈ ${U.num(s)}</b> e <b>cos ${g}° ≈ ${U.num(Math.cos(g * Math.PI / 180))}</b>. A que altura, aproximadamente, ele está?`,
           fig: desenho(g, { hip: `${D} m ✈`, opo: "h", adj: "pista" }),
           certa,
           erradas: [
-            { html: `${U.num(D * Math.cos(g * Math.PI / 180), 0)} m`, porque: "você usou o cosseno: isso dá a distância na horizontal, e não a altura." },
+            { html: `${U.num(D * Math.round(Math.cos(g * Math.PI / 180) * 100) / 100, 0)} m`, porque: "você usou o cosseno: isso dá a distância na horizontal, e não a altura." },
             { html: `${U.num(D / s, 0)} m`, porque: "você dividiu pelo seno em vez de multiplicar (e uma altura maior que o caminho percorrido é impossível)." },
             { html: `${U.num(D * s / 10, 0)} m`, porque: "a vírgula escorregou: confira a multiplicação." },
             { html: `${U.num(D - h, 0)} m`, porque: "a altura não é o caminho menos alguma coisa: use o seno." },
@@ -546,9 +548,9 @@ const GERADORES = {
             { html: comAprox(V(L, r), " m"), porque: `faltou dividir por 2: ${fn} ${a}° = ${NOT[fn][a][0]}.` },
             { html: comAprox(V(L, 1), " m"), porque: "esse é o comprimento da própria escada/linha (a hipotenusa)." },
             { html: comAprox(V(L / 2, r === 2 ? 3 : 2), " m"), porque: `confira na tabela o valor de ${fn} ${a}°.` },
-            { html: comAprox(V(2 * L, 1), " m"), porque: `você dividiu pelo ${NOME[fn]} em vez de multiplicar (e um cateto nunca é maior que a hipotenusa).` },
+            { html: comAprox(V(2 * L, 1), " m"), porque: "um cateto nunca é maior que a hipotenusa (o comprimento da " + (tipo === "escada" ? "escada" : "linha") + ")." },
           ],
-          resol: `<ol class="passos"><li>A ${tipo === "escada" ? "escada" : "linha"} (${L} m) é a ${NOMELADO.hip}. ${pergAltura ? `A altura é o ${NOMELADO.opo}` : `A distância até o muro é o ${NOMELADO.adj}`} ao ângulo de ${a}°.</li>
+          resol: `<ol class="passos"><li>${tipo === "escada" ? "A escada" : "A linha"} (${L} m) é a ${NOMELADO.hip}. ${pergAltura ? `A altura é o ${NOMELADO.opo}` : `A distância até o muro é o ${NOMELADO.adj}`} ao ângulo de ${a}°.</li>
             <li><span class="mat">${fn} ${a}° = ${U.frx(pergAltura ? "h" : "d", L)} ⟹ ${pergAltura ? "h" : "d"} = ${L} · ${NOT[fn][a][0]} = <b>${comAprox(certa, " m")}</b></span></li></ol>`,
         };
       }
@@ -563,7 +565,7 @@ const GERADORES = {
           erradas: [
             { html: comAprox(a === 60 ? V(S, 1) : V(S, 3), " m"), porque: `confira o valor da tangente: tg ${a}° = ${NOT.tg[a][0]}.` },
             { html: comAprox(V(S / 2, a === 30 ? 1 : a === 60 ? 3 : 2), " m"), porque: "você usou seno ou cosseno, mas a sombra e a altura são os dois catetos: isso pede a tangente." },
-            { html: comAprox(V(2 * S, 1), " m"), porque: "você tratou a sombra como se fosse a hipotenusa." },
+            { html: comAprox(V(2 * S, 1), " m"), porque: `confira a conta: h = ${S} · tg ${a}°, e tg ${a}° = ${NOT.tg[a][0]} (não 2).` },
             { html: comAprox(a === 30 ? V(S, 1) : V(m + 1, 2), " m"), porque: "monte tg = oposto ÷ adjacente e isole h." },
           ],
           resol: `<ol class="passos"><li>A sombra (${S} m) encosta no ângulo: é o ${NOMELADO.adj}. A altura h é o ${NOMELADO.opo}.</li>
@@ -572,12 +574,12 @@ const GERADORES = {
         };
       }
       // rampa de acessibilidade (valores aproximados)
-      const [g, t] = U.pick([[5, 0.087], [6, 0.105], [8, 0.14]]);
+      const [g, t] = U.pick([[3, 0.052], [4, 0.070], [4.5, 0.079]]);
       const C = U.pick([10, 20, 30, 40, 50]);
       const h = C * t;
       return {
-        enun: `Uma rampa de acessibilidade tem <b>${C} m</b> de comprimento na horizontal e inclinação de <b>${g}°</b>. Use <b>tg ${g}° ≈ ${U.num(t, 3)}</b>. Quanto ela sobe, aproximadamente?`,
-        fig: desenho(g * 3, { adj: `${C} m`, opo: "h", hip: "rampa" }).replace(`${g * 3}°`, `${g}°`),
+        enun: `Uma rampa de acessibilidade tem <b>${C} m</b> de comprimento na horizontal e inclinação de <b>${U.num(g, 1)}°</b>. Use <b>tg ${U.num(g, 1)}° ≈ ${U.num(t, 3)}</b>. Quanto ela sobe, aproximadamente?`,
+        fig: desenho(g * 3, { adj: `${C} m`, opo: "h", hip: "rampa" }).replace(`${g * 3}°`, `${U.num(g, 1)}°`),
         certa: `${U.num(h, 2)} m`,
         erradas: [
           { html: `${U.num(C / t, 0)} m`, porque: "você dividiu pela tangente em vez de multiplicar." },
@@ -638,7 +640,7 @@ const GERADORES = {
           erradas: [
             { html: U.fr(h - p, h), porque: "sen² + cos² = 1 não quer dizer sen + cos = 1. É preciso elevar ao quadrado." },
             { html: U.fr(p, q), porque: "isso seria a tangente (oposto ÷ adjacente)." },
-            { html: U.fr(q, p), porque: "fração invertida: o cosseno de um ângulo agudo é menor que 1." },
+            { html: U.fr(q, p), porque: "isso é adjacente ÷ oposto (o inverso da tangente), não o cosseno." },
             { html: U.fr(h, q), porque: "fração invertida: a hipotenusa fica embaixo." },
           ],
           resol: `<ol class="passos"><li><span class="mat">sen² α + cos² α = 1 ⟹ (${U.fr(p, h)})² + cos² α = 1</span></li>
@@ -672,7 +674,7 @@ const GERADORES = {
           resol: `<p>Num triângulo retângulo, o oposto de um ângulo agudo é o adjacente do outro. Por isso <span class="mat">sen α = cos (90° − α)</span>.</p><p><span class="mat">90° − α = ${b}° ⟹ α = <b>${90 - b}°</b></span></p>`,
         };
       }
-      const a = U.rand(15, 75);
+      let a = U.rand(15, 75); if (a === 45) a = 40;
       return {
         enun: `Os dois ângulos agudos de um triângulo retângulo são α e β. Se α = ${a}°, qual destas igualdades é verdadeira?`,
         certa: `sen ${a}° = cos ${90 - a}°`,
